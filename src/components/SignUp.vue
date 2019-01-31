@@ -32,44 +32,30 @@
                 () => !!password && password.length <= 16 && password.length >= 8 || 'Password must be betweeen 8 to 16 characters',
                 passwordCheck
               ]"
+              type="password"
               v-model="password"
               label="Password"
               placeholder="At least a number, lowercase letter, capital letter and special character"
               required
             ></v-text-field>
-            <v-autocomplete
-              ref="role"
-              :rules="[() => !!role || 'This field is required']"
-              :items="roles"
-              v-model="role"
-              label="Role"
-              placeholder="Select..."
-              required
-            ></v-autocomplete>
+
+            <v-radio-group v-model="role" :mandatory="false" row>
+              <v-radio label="Customer" value="customer"></v-radio>
+              <v-radio label="Seller" value="seller"></v-radio>
+              <v-radio label="Administrator" value="admin"></v-radio>
+            </v-radio-group>
+
           </v-card-text>
           <v-divider class="mt-5"></v-divider>
           <v-card-actions>
-            <v-btn flat>Cancel</v-btn>
-            <v-spacer></v-spacer>
-            <v-slide-x-reverse-transition>
-              <v-tooltip
-                v-if="formHasErrors"
-                left
-              >
-                <v-btn
-                  slot="activator"
-                  icon
-                  class="my-0"
-                  @click="resetForm"
-                >
-                  <v-icon>refresh</v-icon>
-                </v-btn>
-                <span>Refresh form</span>
-              </v-tooltip>
-            </v-slide-x-reverse-transition>
             <v-btn color="primary" flat @click="submit">Submit</v-btn>
-
           </v-card-actions>
+          <v-card-text>
+            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please sign up your account correctly.</p>
+            <p class="typo__p red--text" v-if="isRegister === 'NO'">{{message}}</p>
+            <p class="typo__p green--text" v-if="isRegister === 'YES'">{{message}}</p>
+            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isRegister === 'YES'"> Jumping to the Home page ...</p>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -77,16 +63,27 @@
 </template>
 
 <script>
+import adminService from '@/services/adminServices'
+import sellerService from '@/services/sellerServices'
+import customerService from '@/services/customerServices'
+import Vue from 'vue'
+import validate from 'vee-validate'
+
+Vue.use(validate)
+
 export default {
   name: 'SignUp',
   data: () => ({
-    roles: ['Customer', 'Seller', 'Administrator'],
+    roles: ['Customer', 'Seller', 'Administrator', 'Afghanistan', 'Albania', 'Algeria'],
     errorMessages: '',
     name: null,
     email: null,
     password: null,
-    role: null,
-    formHasErrors: false
+    role: 'customer',
+    formHasErrors: false,
+    submitStatus: null,
+    isRegister: null,
+    message: ''
   }),
 
   computed: {
@@ -119,25 +116,62 @@ export default {
 
       return this.errorMessages
     },
-    resetForm () {
-      this.errorMessages = []
-      this.formHasErrors = false
-
-      Object.keys(this.form).forEach(f => {
-        this.$refs[f].reset()
-      })
-    },
     submit () {
       this.formHasErrors = false
 
       Object.keys(this.form).forEach(f => {
         if (!this.form[f]) this.formHasErrors = true
 
-        this.$refs[f].validate(true)
+        // this.$refs[f].validate(true)
       })
 
-      if (this.formHasErrors === false){
-
+      if (this.formHasErrors === false) {
+        let user = {'username': this.email, 'password': this.password, 'name': this.name}
+        if (this.role === 'customer') {
+          customerService.postSignup(user).then(response => {
+            if (response.data.data === null) {
+              this.message = ''
+              this.message = response.data.message
+              this.isRegister = 'NO'
+            } else {
+              this.isRegister = 'YES'
+              this.message = ''
+              this.message = response.data.message
+              this.submitStatus = 'PENDING'
+              // this.$router.push('/')
+            }
+            console.log(response.data)
+          })
+        } else if (this.role === 'seller') {
+          sellerService.postSignup(user).then(response => {
+            console.log(response.data)
+            if (response.data.data === null) {
+              this.isRegister = 'NO'
+              this.message = ''
+              this.message = response.data.message
+            } else {
+              this.isRegister = 'YES'
+              this.message = ''
+              this.message = response.data.message
+              this.submitStatus = 'PENDING'
+              // this.$router.push('/')
+            }
+          })
+        } else if (this.role === 'admin') {
+          adminService.postSignin(user).then(response => {
+            if (response.data.data === null) {
+              this.isRegister = 'NO'
+              this.message = ''
+              this.message = response.data.message
+            } else {
+              this.isRegister = 'YES'
+              this.message = ''
+              this.message = response.data.message
+              this.submitStatus = 'PENDING'
+              // this.$router.push('/')
+            }
+          })
+        }
       }
     }
   }
@@ -145,8 +179,8 @@ export default {
 </script>
 
 <style scoped>
-#signupCard {
-  min-width: 500px;
-  margin-top: 100px;
-}
+  #signupCard {
+    min-width: 500px;
+    margin-top: 100px;
+  }
 </style>
