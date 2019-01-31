@@ -3,16 +3,20 @@
     <div class="hide-overflow" style="position: relative;">
       <v-toolbar absolute color="teal lighten-3" dark scroll-off-screen scroll-target="#scrolling-techniques">
         <!--<v-toolbar-side-icon></v-toolbar-side-icon>-->
-        <v-btn icon>
-          <v-icon to="/">home</v-icon>
+        <v-btn icon to="/">
+          <v-icon >home</v-icon>
         </v-btn>
         <v-toolbar-title>Overseas Shopping</v-toolbar-title>
 
         <v-spacer>
-          <v-autocomplete :loading="loading" :items="items" :search-input.sync="search"
-            v-model="search" cache-items class="mx-3" flat hide-no-data hide-details
-            label="Search" solo-inverted append-icon="search">
-          </v-autocomplete>
+          <!--<v-autocomplete :loading="loading" :items="items" :search-input.sync="search"-->
+            <!--v-model="search" cache-items class="mx-3" flat hide-no-data hide-details-->
+            <!--label="Search" solo-inverted append-icon="search">-->
+          <!--</v-autocomplete>-->
+          <v-text-field justify-center
+            color="white"
+            label="Search"
+          ></v-text-field>
         </v-spacer>
 
         <v-btn icon>
@@ -46,30 +50,31 @@
       <!--<div id="scrolling-techniques" class="scroll-y" style="max-height: 600px;">-->
         <!--<v-container style="height: 1000px;"></v-container>-->
       <!--</div>-->
-      <div id="body"></div>
 
-      <v-footer dark height="auto">
-        <v-card flat tile class="indigo lighten-1 white--text text-xs-center">
-          <v-card-text>
-            <v-btn v-for="icon in icons" :key="icon" class="mx-3 white--text" icon>
-              <v-icon size="24px">{{ icons }}</v-icon>
-            </v-btn>
-          </v-card-text>
+      <router-view/>
 
-          <v-card-text class="white--text pt-0">
-            Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus
-            luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus.
-            Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel
-            elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-          </v-card-text>
+      <!--<v-footer dark height="auto">-->
+        <!--<v-card flat tile class="indigo lighten-1 white&#45;&#45;text text-xs-center">-->
+          <!--<v-card-text>-->
+            <!--<v-btn v-for="icon in icons" :key="icon" class="mx-3 white&#45;&#45;text" icon>-->
+              <!--<v-icon size="24px">{{ icons }}</v-icon>-->
+            <!--</v-btn>-->
+          <!--</v-card-text>-->
 
-          <v-divider></v-divider>
+          <!--<v-card-text class="white&#45;&#45;text pt-0">-->
+            <!--Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus-->
+            <!--luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus.-->
+            <!--Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel-->
+            <!--elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.-->
+          <!--</v-card-text>-->
 
-          <v-card-text class="white--text">&copy;2018 —
-            <strong>Vuetify</strong>
-          </v-card-text>
-        </v-card>
-      </v-footer>
+          <!--<v-divider></v-divider>-->
+
+          <!--<v-card-text class="white&#45;&#45;text">&copy;2018 —-->
+            <!--<strong>Vuetify</strong>-->
+          <!--</v-card-text>-->
+        <!--</v-card>-->
+      <!--</v-footer>-->
     </div>
     <!--<router-view/>-->
   </div>
