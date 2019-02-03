@@ -3,6 +3,7 @@
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="signupCard">
+          <v-card-title>Sign Up</v-card-title>
           <v-card-text>
             <v-text-field
               ref="name"

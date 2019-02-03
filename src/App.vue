@@ -27,6 +27,7 @@
         <v-label>{{UserName}}</v-label>
 
         <v-btn flat small to="/signin">Sign In</v-btn>
+        <v-btn flat small to="/signout" @click="showDialog">Sign Out</v-btn>
         <v-btn flat small to="/signup">Sign Up</v-btn>
 
         <v-btn icon>
@@ -50,6 +51,7 @@
       <!--<div id="scrolling-techniques" class="scroll-y" style="max-height: 600px;">-->
         <!--<v-container style="height: 1000px;"></v-container>-->
       <!--</div>-->
+      <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
 
       <router-view/>
 
@@ -81,11 +83,17 @@
 </template>
 
 <script>
+import SignOut from '@/components/SignOut'
+
 export default {
   name: 'App',
+  components: {
+    'signout': SignOut
+  },
   data () {
     return {
       UserName: 'UserName',
+      isLogged: 'NO',
       itemsNum: 1,
       notices: 10,
       icons: [
@@ -94,7 +102,16 @@ export default {
         'fab fa-google-plus',
         'fab fa-linkedin',
         'fab fa-instagram'
-      ]
+      ],
+      dialog: false
+    }
+  },
+  methods: {
+    showDialog () {
+      this.dialog = true
+    },
+    updateDialog (dialog) {
+      this.dialog = dialog
     }
   }
 }

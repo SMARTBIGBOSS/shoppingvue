@@ -6,5 +6,8 @@ export default {
   },
   postSignup (user) {
     return Api().post('/register/admin', user)
+  },
+  postSignout () {
+    return Api().post('/logout/admin')
   }
 }
