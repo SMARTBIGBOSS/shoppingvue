@@ -13,10 +13,10 @@
             <!--v-model="search" cache-items class="mx-3" flat hide-no-data hide-details-->
             <!--label="Search" solo-inverted append-icon="search">-->
           <!--</v-autocomplete>-->
-          <v-text-field justify-center
-            color="white"
-            label="Search"
-          ></v-text-field>
+          <!--<v-text-field justify-center-->
+            <!--color="white"-->
+            <!--label="Search"-->
+          <!--&gt;</v-text-field>-->
         </v-spacer>
 
         <v-btn icon>
@@ -26,8 +26,8 @@
 
         <v-label>{{UserName}}</v-label>
 
-        <v-btn flat small to="/signin">Sign In</v-btn>
-        <v-btn flat small to="/signout" @click="showDialog">Sign Out</v-btn>
+        <v-btn flat small to="/signin" v-if="isshow">Sign In</v-btn>
+        <v-btn flat small to="/signout" v-if="!isshow" @click="showDialog">Sign Out</v-btn>
         <v-btn flat small to="/signup">Sign Up</v-btn>
 
         <v-btn icon>
@@ -84,6 +84,10 @@
 
 <script>
 import SignOut from '@/components/SignOut'
+import Vue from 'vue'
+import VueCookies from 'vue-cookies'
+
+Vue.use(VueCookies)
 
 export default {
   name: 'App',
@@ -103,10 +107,22 @@ export default {
         'fab fa-linkedin',
         'fab fa-instagram'
       ],
-      dialog: false
+      dialog: false,
+      isshow: false
     }
   },
+  created () {
+    this.loadToolbar()
+  },
   methods: {
+    loadToolbar () {
+      console.log(this.$cookies.get('user'))
+      if (this.$cookies.get('user') === null) {
+        this.isshow = true
+      } else {
+        this.isshow = false
+      }
+    },
     showDialog () {
       this.dialog = true
     },

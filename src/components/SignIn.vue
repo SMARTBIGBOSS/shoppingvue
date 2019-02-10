@@ -105,7 +105,10 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              // this.$router.push('/')
+              setTimeout(() => {
+                this.$router.go(0)
+              }, 1000)
+              this.$router.replace('/')
             }
           })
         } else if (this.role === 'seller') {
@@ -120,7 +123,11 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              this.$router.push('/')
+              // setTimeout(() => {
+              //   this.$router.go(0)
+              // }, 1000)
+              this.$router.go(0)
+              this.$router.replace('/seller_home')
             }
           })
         } else if (this.role === 'admin') {
@@ -134,6 +141,12 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
+
+              // this.$router.push('/')
+              // setTimeout(() => {
+              this.$router.go(0)
+              // this.$router.go(-2)
+              // }, 1000)
               this.$router.push('/')
             }
           })
@@ -148,7 +161,7 @@ export default {
 #signinCard {
   /*justify-content: space-around;*/
   min-width: 500px;
-  margin-top: 100px;
+  /*margin-top: 10px;*/
 }
 #signinFrom {
   justify-content: space-around;

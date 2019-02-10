@@ -6,5 +6,17 @@ export default {
   },
   postSignup (user) {
     return Api().post('/register/seller', user)
+  },
+  postAddCatalog (user, catalog) {
+    return Api().post(`/catalogue/add/${user}`, catalog)
+  },
+  getAllCatalog (user) {
+    return Api().get(`/catalogue/${user}`)
+  },
+  putCatalog (user, id, catalog) {
+    return Api().put(`/catalogue/edit/${user}/${id}`, catalog)
+  },
+  deleteCatalog (id) {
+    return Api().delete(`/catalogue/remove/${id}`)
   }
 }

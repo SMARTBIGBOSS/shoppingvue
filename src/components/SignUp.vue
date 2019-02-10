@@ -3,7 +3,7 @@
     <v-layout justify-center>
       <v-flex xs12 sm10 md8 lg6>
         <v-card ref="form" id="signupCard">
-          <v-card-title>Sign Up</v-card-title>
+          <v-card-title class="display-1 pl-5 pt-5">Sign Up</v-card-title>
           <v-card-text>
             <v-text-field
               ref="name"
@@ -182,6 +182,6 @@ export default {
 <style scoped>
   #signupCard {
     min-width: 500px;
-    margin-top: 100px;
+    /*margin-top: 50px;*/
   }
 </style>
