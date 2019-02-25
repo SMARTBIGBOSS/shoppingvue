@@ -1,38 +1,44 @@
 <template>
   <div id="signin">
-    <v-layout justify-center>
-      <v-card id="signinCard" flat>
-        <v-card-title class="display-1 pl-5 pt-5">Sign In</v-card-title>
-        <!--<v-layout align-start justify-space-around fill-height>-->
-        <form @submit.prevent="submit">
-          <!--<v-layout id="signinFrom">-->
-          <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required
-                        @input="$v.email.$touch()" @blur="$v.email.$touch()"></v-text-field>
-          <v-text-field type="password" v-model="password" :error-messages="passwordErrors" :counter="30" label="Password" required
-                        @input="$v.password.$touch()" @blur="$v.password.$touch()"></v-text-field>
-          <!--<v-select v-model="role" :items="items" :error-messages="roleErrors" label="Roles" required-->
-            <!--@change="$v.role.$touch()"-->
-            <!--@blur="$v.role.$touch()">-->
-            <!--&lt;!&ndash;<option value="Seller">Seller</option>&ndash;&gt;-->
-            <!--&lt;!&ndash;<option value="Customer">Customer</option>&ndash;&gt;-->
-          <!--</v-select>-->
-            <v-radio-group v-model="role" :mandatory="false" row>
-              <v-radio label="Customer" value="customer"></v-radio>
-              <v-radio label="Seller" value="seller"></v-radio>
-              <v-radio label="Administrator" value="admin"></v-radio>
-            </v-radio-group>
+    <!--<v-app>-->
+      <v-layout justify-center>
+        <v-flex xs12 sm10 md8 lg6>
+        <v-card id="signinCard" flat>
+          <v-card-title class="display-1 pl-5 pt-5">Sign In</v-card-title>
+          <!--<v-layout align-start justify-space-around fill-height>-->
+          <v-card-text>
+          <form @submit.prevent="submit">
+            <!--<v-layout id="signinFrom">-->
+            <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required
+                          @input="$v.email.$touch()" @blur="$v.email.$touch()"></v-text-field>
+            <v-text-field type="password" v-model="password" :error-messages="passwordErrors" :counter="30" label="Password" required
+                          @input="$v.password.$touch()" @blur="$v.password.$touch()"></v-text-field>
+            <!--<v-select v-model="role" :items="items" :error-messages="roleErrors" label="Roles" required-->
+              <!--@change="$v.role.$touch()"-->
+              <!--@blur="$v.role.$touch()">-->
+              <!--&lt;!&ndash;<option value="Seller">Seller</option>&ndash;&gt;-->
+              <!--&lt;!&ndash;<option value="Customer">Customer</option>&ndash;&gt;-->
+            <!--</v-select>-->
+              <v-radio-group v-model="role" :mandatory="false" row>
+                <v-radio label="Customer" value="customer"></v-radio>
+                <v-radio label="Seller" value="seller"></v-radio>
+                <v-radio label="Administrator" value="admin"></v-radio>
+              </v-radio-group>
 
-          <v-btn @click="submit">submit</v-btn>
-          <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please sign in your account correctly.</p>
-          <p class="typo__p red--text" v-if="isLogged === 'NO'">{{message}}</p>
-          <p class="typo__p green--text" v-if="isLogged === 'YES'">{{message}}</p>
-          <p class="typo__p orange--text" v-if="submitStatus === 'PENDING'"> Jumping to the Home page ...</p>
+            <v-btn @click="submit">submit</v-btn>
+            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please sign in your account correctly.</p>
+            <p class="typo__p red--text" v-if="isLogged === 'NO'">{{message}}</p>
+            <p class="typo__p green--text" v-if="isLogged === 'YES'">{{message}}</p>
+            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING'"> Jumping to the Home page ...</p>
 
-          <!--</div>-->
-        </form>
-        <!--</v-layout>-->
-      </v-card>
-    </v-layout>
+            <!--</div>-->
+          </form>
+          <!--</v-layout>-->
+          </v-card-text>
+        </v-card>
+        </v-flex>
+      </v-layout>
+    <!--</v-app>-->
   </div>
 </template>
 
@@ -108,7 +114,7 @@ export default {
               setTimeout(() => {
                 this.$router.go(0)
               }, 1000)
-              this.$router.replace('/')
+              this.$router.push({path: '/', query: {id: response.data.data._id, userName: response.data.data.name, role: this.role}})
             }
           })
         } else if (this.role === 'seller') {
@@ -163,23 +169,5 @@ export default {
   min-width: 500px;
   /*margin-top: 10px;*/
 }
-#signinFrom {
-  justify-content: space-around;
-  /*max-width: 500px;*/
-}
-v-text-field {
-  border-color: #76FF03;
-  background: #EFE;
-}
-.dirty:focus {
-  outline-color: #76FF03;
-}
-.error {
-  border-color: red;
-  background: #157ffb;
-  color: whitesmoke;
-}
-.error:focus {
-  outline-color: #ffa519;
-}
+
 </style>

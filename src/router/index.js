@@ -5,6 +5,10 @@ import SignIn from '@/components/SignIn'
 import SignUp from '@/components/SignUp'
 import SignOut from '@/components/SignOut'
 import SellerHome from '@/components/SellerHome'
+import AddProduct from '@/components/AddProduct'
+import EditProduct from '@/components/EditProduct'
+import EditAccount from '@/components/EditAccount'
+import AccountInformation from '@/components/AccountInformation'
 
 Vue.use(Router)
 
@@ -34,6 +38,26 @@ export default new Router({
       path: '/seller_home',
       name: 'SellerHome',
       component: SellerHome
+    },
+    {
+      path: '/editProduct',
+      name: 'EditProduct',
+      component: EditProduct
+    },
+    {
+      path: '/addProduct',
+      name: 'AddProduct',
+      component: AddProduct
+    },
+    {
+      path: '/showAccount',
+      name: 'AccountInformation',
+      component: AccountInformation
+    },
+    {
+      path: '/editAccount',
+      name: 'EditAccount',
+      component: EditAccount
     }
   ]
 })

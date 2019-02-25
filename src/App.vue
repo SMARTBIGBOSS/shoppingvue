@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div class="hide-overflow" style="position: relative;">
+      <v-app>
       <v-toolbar absolute color="teal lighten-3" dark scroll-off-screen scroll-target="#scrolling-techniques">
         <!--<v-toolbar-side-icon></v-toolbar-side-icon>-->
         <v-btn icon to="/">
@@ -24,7 +25,7 @@
         <v-icon large>account_circle</v-icon>
         </v-btn>
 
-        <v-label>{{UserName}}</v-label>
+        <v-label @click="showAccount">{{userName}}</v-label>
 
         <v-btn flat small to="/signin" v-if="isshow">Sign In</v-btn>
         <v-btn flat small to="/signout" v-if="!isshow" @click="showDialog">Sign Out</v-btn>
@@ -77,6 +78,7 @@
           <!--</v-card-text>-->
         <!--</v-card>-->
       <!--</v-footer>-->
+      </v-app>
     </div>
     <!--<router-view/>-->
   </div>
@@ -96,7 +98,7 @@ export default {
   },
   data () {
     return {
-      UserName: 'UserName',
+      userName: 'UserName',
       isLogged: 'NO',
       itemsNum: 1,
       notices: 10,
@@ -116,11 +118,28 @@ export default {
   },
   methods: {
     loadToolbar () {
-      console.log(this.$cookies.get('user'))
+      // console.log(this.$cookies.get('user'))
       if (this.$cookies.get('user') === null) {
         this.isshow = true
       } else {
         this.isshow = false
+        this.userName = this.$route.query.userName
+        this.getLogo(this.$route.query._id, this.$route.query.role)
+      }
+    },
+    getLogo (id, role) {
+      if (role === 'seller') {
+
+      }
+      if (role === 'customer') {
+
+      }
+    },
+    showAccount () {
+      if (this.$cookies.get('user') === null) {
+        this.router.push('/signin')
+      } else {
+        this.router.push('/showAccount')
       }
     },
     showDialog () {
