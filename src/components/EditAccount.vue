@@ -1,44 +1,136 @@
 <template>
-  <div id="signup">
-    <v-layout justify-center>
-      <v-flex xs12 sm10 md8 lg6>
-        <v-card ref="form" id="signupCard">
-          <v-card-title class="display-1 pl-5 pt-5">Edit Account</v-card-title>
-          <v-card-text>
-            <v-text-field ref="name" v-model="name"
-                          :rules="[() => !!name || 'This field is required',
-                         () => !!name && name.length <= 30 || 'Name must be less than 30 characters']"
-                          label="Name" placeholder="Shopping" required></v-text-field>
-            <v-text-field ref="email" :rules="[() => !!email || 'This field is required', emailCheck]"
-                          v-model="email" label="Email Address" placeholder="shopping@gmail.com" required></v-text-field>
-            <v-text-field ref="password"
-                          :rules="[() => !!password || 'This field is required',
-                         () => !!password && password.length <= 16 && password.length >= 8 || 'Password must be betweeen 8 to 16 characters',
-                  passwordCheck]"
-                          type="password" v-model="password" label="Password" placeholder="At least a number, lowercase letter, capital letter and special character"
-                          required></v-text-field>
+  <div id="editaccount">
+    <v-card>
+      <v-card-title>Account Information
+        <v-spacer></v-spacer>
+      </v-card-title>
+      <v-card-text>
+        <v-form v-if="iscustomer" ref="form" v-model="valid" lazy-validation dark>
+          <v-text-field v-model="name" :counter="100" :rules="nameRules" label="Name" required></v-text-field>
 
-          </v-card-text>
-          <v-divider class="mt-5"></v-divider>
-          <v-card-actions>
-            <v-btn color="primary" flat @click="submit">Update</v-btn>
-          </v-card-actions>
-          <v-card-text>
-            <p class="typo__p red--text" v-if="submitStatus === 'ERROR'">Please sign up your account correctly.</p>
-            <p class="typo__p red--text" v-if="isRegister === 'NO'">{{message}}</p>
-            <p class="typo__p green--text" v-if="isRegister === 'YES'">{{message}}</p>
-            <p class="typo__p orange--text" v-if="submitStatus === 'PENDING' && isRegister === 'YES'"> Jumping to the Home page ...</p>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <!--</v-app>-->
+          <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
+
+          <v-layout row wrap>
+            <v-flex xs8>
+          <v-text-field v-model="password" type="password" :rules="passwordRules" label="Password" required :disabled="withoutpass"></v-text-field>
+            </v-flex>
+            <v-flex xs4>
+              <v-btn @click="withpass">Change</v-btn>
+             <v-btn @click="reset">Reset</v-btn>
+            </v-flex>
+          </v-layout>
+          <v-btn color="indigo lighten-2" :disabled="!valid" @click="updateUser">Update</v-btn>
+          <!--<div class="display-1 font-weight-thin red&#45;&#45;text">{{errmsg}}</div>-->
+        </v-form>
+
+        <v-form v-if="!iscustomer" ref="form" v-model="valid" lazy-validation dark>
+          <v-text-field v-model="name" :counter="100" :rules="nameRules" label="Name" required></v-text-field>
+
+          <v-text-field v-model="email" label="Email" required></v-text-field>
+
+          <v-layout row wrap>
+            <v-flex xs8>
+              <v-text-field v-model="password" type="password" :rules="passwordRules" label="Password" required :disabled="withoutpass"></v-text-field>
+            </v-flex>
+            <v-flex xs4>
+              <v-btn @click="withpass">Change</v-btn>
+              <v-btn @click="reset">Reset</v-btn>
+            </v-flex>
+          </v-layout>
+
+          <v-text-field v-model="description" :rules="descriptionRules" label="Description"></v-text-field>
+
+          <v-btn color="indigo lighten-2" :disabled="!valid" @click="updateUser">Update</v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'EditAccount'
+  name: 'EditAccount',
+  props: ['user', 'isCustomer'],
+  data () {
+    return {
+      valid: true,
+      emailChecker: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/,
+      passwordChecker: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W])[a-zA-Z\d\W?$]{8,16}/,
+      name: this.user.name,
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 100) || 'Name must be less than 100 characters'
+      ],
+      email: this.user.username,
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => (v && this.emailChecker.test(v)) || 'Must be valid e-mail'
+      ],
+      password: 'Default-567',
+      passwordRules: [
+        v => (v && this.passwordChecker.test(v)) || 'At least a number, lowercase letter, capital letter and special character'
+      ],
+      withoutpass: true,
+      description: this.user.description,
+      descriptionRules: [
+        v => (v && v.length <= 200) || 'description must be less than 200 characters'
+      ],
+      iscustomer: this.isCustomer
+    }
+  },
+  methods: {
+    updateUser () {
+      if (this.iscustomer) {
+        if (this.withoutpass) {
+          let newUser = {
+            name: this.name,
+            username: this.email
+          }
+          // this.user = newUser
+          this.$emit('user-is-updated', newUser, this.withoutpass)
+          // this.$router.push('/showAccount')
+        } else if (!this.withoutpass) {
+          let newUser = {
+            name: this.name,
+            username: this.email,
+            password: this.password
+          }
+          // this.user = newUser
+          this.$emit('user-is-updated', newUser, this.withoutpass)
+          // this.$router.push('/showAccount')
+        }
+      } else {
+        if (this.withoutpass) {
+          let newUser = {
+            name: this.name,
+            username: this.email,
+            description: this.description
+          }
+          // this.user = newUser
+          this.$emit('user-is-updated', newUser, this.withoutpass)
+          // this.$router.push('/showAccount')
+        } else if (!this.withoutpass) {
+          let newUser = {
+            name: this.name,
+            username: this.email,
+            password: this.password,
+            description: this.description
+          }
+          // this.user = newUser
+          this.$emit('user-is-updated', newUser, this.withoutpass)
+          // this.$router.push('/showAccount')
+        }
+      }
+    },
+    withpass () {
+      this.password = ''
+      this.withoutpass = false
+    },
+    reset () {
+      this.password = 'Default-567'
+      this.withoutpass = true
+    }
+  }
 }
 </script>
 

@@ -6,5 +6,14 @@ export default {
   },
   postSignup (user) {
     return Api().post('/register/customer', user)
+  },
+  fetchCustomer (id) {
+    return Api().get(`/customer/${id}`)
+  },
+  putCustomerWithoutPass (id, customer) {
+    return Api().put(`/customer/${id}/editwithoutpass`, customer)
+  },
+  putCustomerWithPass (id, customer) {
+    return Api().put(`/customer/${id}/edit`, customer)
   }
 }

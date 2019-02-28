@@ -1,11 +1,11 @@
 import Api from '@/services/api'
 
 export default {
-  getProductByCatalog (user, catalogeId) {
-    return Api().get(`/product/${user}/${catalogeId}`)
+  getProductByCatalog (seller, catalogeId) {
+    return Api().get(`/${seller}/product/${catalogeId}`)
   },
-  postProduct (user, product) {
-    return Api().post(`/product/add/${user}`, product)
+  postProduct (seller, product) {
+    return Api().post(`/${seller}/product/add`, product)
   },
   deleteProduct (id) {
     return Api().delete(`/product/delete/${id}`)
@@ -13,8 +13,8 @@ export default {
   fetchOneProduct (id) {
     return Api().get(`/product/${id}`)
   },
-  putProduct (user, id, product) {
-    return Api().put(`/product/edit/${user}/${id}`, product)
+  putProduct (seller, id, product) {
+    return Api().put(`/${seller}/product/edit/${id}`, product)
   },
   fetchMainImg (id) {
     return Api().get(`/seller/product/${id}/mainImg`)

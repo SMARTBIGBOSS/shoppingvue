@@ -108,7 +108,7 @@ export default {
       }
       // console.log(this.catalogueId)
       if (this.$refs.form.validate()) {
-        // let user = '5c6339630516b0316085e10f'
+        // let user = '5c633960516b0316085e10f'
         let newProduct = {
           name: this.name,
           price: this.price,

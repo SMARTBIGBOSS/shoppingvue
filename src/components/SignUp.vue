@@ -22,7 +22,6 @@
               <v-radio-group v-model="role" :mandatory="false" row>
                 <v-radio label="Customer" value="customer"></v-radio>
                 <v-radio label="Seller" value="seller"></v-radio>
-                <v-radio label="Administrator" value="admin"></v-radio>
               </v-radio-group>
 
             </v-card-text>
@@ -44,7 +43,6 @@
 </template>
 
 <script>
-import adminService from '@/services/adminServices'
 import sellerService from '@/services/sellerServices'
 import customerService from '@/services/customerServices'
 import Vue from 'vue'
@@ -55,7 +53,7 @@ Vue.use(validate)
 export default {
   name: 'SignUp',
   data: () => ({
-    roles: ['Customer', 'Seller', 'Administrator', 'Afghanistan', 'Albania', 'Algeria'],
+    roles: ['Customer', 'Seller'],
     errorMessages: '',
     name: null,
     email: null,
@@ -126,20 +124,6 @@ export default {
         } else if (this.role === 'seller') {
           sellerService.postSignup(user).then(response => {
             console.log(response.data)
-            if (response.data.data === null) {
-              this.isRegister = 'NO'
-              this.message = ''
-              this.message = response.data.message
-            } else {
-              this.isRegister = 'YES'
-              this.message = ''
-              this.message = response.data.message
-              this.submitStatus = 'PENDING'
-              // this.$router.push('/')
-            }
-          })
-        } else if (this.role === 'admin') {
-          adminService.postSignin(user).then(response => {
             if (response.data.data === null) {
               this.isRegister = 'NO'
               this.message = ''

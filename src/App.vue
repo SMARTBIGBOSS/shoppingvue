@@ -110,7 +110,9 @@ export default {
         'fab fa-instagram'
       ],
       dialog: false,
-      isshow: false
+      isshow: true,
+      user_id: '',
+      user_role: ''
     }
   },
   created () {
@@ -119,12 +121,15 @@ export default {
   methods: {
     loadToolbar () {
       // console.log(this.$cookies.get('user'))
-      if (this.$cookies.get('user') === null) {
+      if (sessionStorage.getItem('id') === null) {
         this.isshow = true
       } else {
         this.isshow = false
-        this.userName = this.$route.query.userName
-        this.getLogo(this.$route.query._id, this.$route.query.role)
+        this.userName = sessionStorage.getItem('name')
+        this.user_id = sessionStorage.getItem('id')
+        this.user_role = sessionStorage.getItem('role')
+        // console.log(this.user_id)
+        this.getLogo(this.user_id, this.user_role)
       }
     },
     getLogo (id, role) {
@@ -136,10 +141,10 @@ export default {
       }
     },
     showAccount () {
-      if (this.$cookies.get('user') === null) {
-        this.router.push('/signin')
+      if (sessionStorage.getItem('id') === null) {
+        this.$router.push('/signin')
       } else {
-        this.router.push('/showAccount')
+        this.$router.push({path: '/showAccount'})
       }
     },
     showDialog () {
