@@ -74,46 +74,71 @@
               <edit-account-form :user="user" :isCustomer="isCustomer" @user-is-updated="updateAccount"></edit-account-form>
             </template>
 
+            <template v-if="isUploadLogo">
+            </template>
+
             <template v-if="showAddress">
               <v-card>
                 <v-card-title>
                   Shipping Address
                   <v-spacer></v-spacer>
-                  <v-btn color="blue lighten-2" dark @click="addProduct">Add</v-btn>
+                  <v-btn color="blue lighten-2" dark @click="addAddress">Add</v-btn>
                 </v-card-title>
-                <!--<v-data-table :headers="productHeaders" :items="products">-->
-                  <!--<template slot="items" slot-scope="props" v-if="isShowData">-->
+                <v-data-table :headers="addressHeaders" :items="addresses" fix-header>
+                  <template slot="items" slot-scope="props">
                     <!--<td class="justify-center layout px-0">-->
                       <!--<v-avatar :size="40">-->
                         <!--<img :src="props.item.imgPath" v-if="props.item.imgPath !== ''">-->
                       <!--</v-avatar>-->
                     <!--</td>-->
-                    <!--<td>{{ props.item.name }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.price }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.stock }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.class_region_id }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.class_type_id }}</td>-->
-                    <!--&lt;!&ndash;<td class="text-xs-right">{{ props.item.catalogue_id }}</td>&ndash;&gt;-->
-                    <!--<td class="text-xs-right">{{ props.item.isShow }}</td>-->
-                    <!--<td class="justify-center layout px-0">-->
-                      <!--<v-icon small class="mr-2" @click="editProduct(props.item._id)">edit</v-icon>-->
-                      <!--<v-icon small @click="deleteProduct(props.item._id)">delete</v-icon>-->
-                    <!--</td>-->
+                    <tr>
+                    <td>{{ props.item.consignee }}</td>
+                    <td class="text-xs-right">{{ props.item.address }}<br>{{ props.item.city }}, {{ props.item.province }}<br>{{ props.item.country }}</td>
+                    <!--<td class="text-xs-right">{{ props.item.city }}</td>-->
+                    <!--<td class="text-xs-right">{{ props.item.province }}</td>-->
+                    <!--<td class="text-xs-right">{{ props.item.country }}</td>-->
+                    <!--<td class="text-xs-right">{{ props.item.catalogue_id }}</td>-->
+                    <td class="text-xs-right">{{ props.item.contact_num }}</td>
+                    <td class="text-xs-right">{{ props.item.post_code }}</td>
+                    <td class="justify-center layout px-0">
+                      <v-icon small class="mr-2" @click="editAddress(props.item._id)">edit</v-icon>
+                      <v-icon small @click="deleteAddressDialog(props.item._id)">delete</v-icon>
+                    </td>
+                    </tr>
                     <!--<td>-->
                       <!--<v-btn color="blue lighten-2" dark @click="uploadImg">Upload Image</v-btn>-->
                     <!--</td>-->
-                  <!--</template>-->
-                  <!--&lt;!&ndash;<v-alert slot="no-results" :value="true" color="error" icon="warning">&ndash;&gt;-->
-                  <!--&lt;!&ndash;Your search for "{{ search }}" found no results.&ndash;&gt;-->
-                  <!--&lt;!&ndash;</v-alert>&ndash;&gt;-->
-                <!--</v-data-table>-->
+                  </template>
+                  <!--<v-alert slot="no-results" :value="true" color="error" icon="warning">-->
+                  <!--Your search for "{{ search }}" found no results.-->
+                  <!--</v-alert>-->
+                </v-data-table>
               </v-card>
             </template>
 
-            <template v-if="isEditAddress">
-              <edit-address-form :address="address" @address-is-updated="updateAddress"></edit-address-form>
+            <template v-if="isAddAddress">
+              <add-address-form :oneAddress="oneAddress" :isAddAddress="isAddAddress" @address-is-added="createAddress"></add-address-form>
             </template>
 
+            <template v-if="isEditAddress">
+              <edit-address-form :oneAddress="oneAddress" :isEditAddress="isEditAddress" @address-is-updated="updateAddress"></edit-address-form>
+            </template>
+
+            <template v-if="isDeleteAddress">
+              <v-layout row justify-center>
+                <v-dialog v-model="isDeleteAddress" persistent max-width="290">
+                  <v-card>
+                    <v-card-title class="headline">Delete Shipping Address</v-card-title>
+                    <v-card-text>Are you sure to remove this address?</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" flat="flat" @click="cancelDialog">Cancel</v-btn>
+                      <v-btn color="green darken-1" flat="flat" @click="removeAddress">Delete</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-layout>
+            </template>
           </div>
         </v-flex>
   </v-layout>
@@ -131,12 +156,14 @@ export default {
   name: 'AccountInformation',
   components: {
     'edit-account-form': EditAccount,
-    'edit-address-form': EditAddress
+    'edit-address-form': EditAddress,
+    'add-address-form': EditAddress
   },
   data () {
     return {
       user: {},
-      address: {},
+      addresses: {},
+      oneAddress: {},
       itemsC: [
         {
           index: '0',
@@ -165,14 +192,28 @@ export default {
             {title: 'User Logo', index: '01'}]
         }
       ],
+      addressHeaders: [
+        {text: 'Consignee', value: 'consignee', width: '10%'},
+        {text: 'Address', align: 'left', sortable: false, value: 'address', width: '50%'},
+        // {text: 'Town/City', value: 'city'},
+        // {text: 'Province/County/State', value: 'province'},
+        // {text: 'Country', value: 'country'},
+        {text: 'Contact Number', value: 'contact_num', sortable: false, width: '20%'},
+        {text: 'Post Code', value: 'post_code', sortable: false, width: '10%'},
+        {text: 'Action', value: 'action', sortable: false, width: '10%'}
+      ],
       showBasicInfo: true,
       showAddress: false,
       isCustomer: false,
+      isAddAddress: false,
       isEditAddress: false,
+      isUploadLogo: false,
       isEditAccount: false,
+      isDeleteAddress: false,
       user_id: '',
       userName: '',
-      userEmail: ''
+      userEmail: '',
+      address_id: ''
     }
   },
   created () {
@@ -204,22 +245,47 @@ export default {
       }
     },
     getAddress () {
-
+      // this.user_id = sessionStorage.getItem('id')
+      CustomerService.fetchAddresses(this.user_id).then(response => {
+        this.addresses = response.data.data
+      })
     },
     editInfo (index) {
       if (index === '00') {
+        this.isAddAddress = false
+        this.isUploadLogo = false
+        this.isDeleteAddress = false
         this.isEditAccount = false
         this.isEditAddress = false
         this.showAddress = false
         this.showBasicInfo = true
       } else if (index === '01') {
-        this.router.push('/uploadLogo')
+        this.isAddAddress = false
+        this.isDeleteAddress = false
+        this.isEditAccount = false
+        this.isEditAddress = false
+        this.showBasicInfo = false
+        this.showAddress = false
+        this.isUploadLogo = true
+        // this.router.push('/uploadLogo')
       } else if (index === '11') {
+        this.isAddAddress = false
+        this.isUploadLogo = false
+        this.isDeleteAddress = false
         this.isEditAccount = false
         this.isEditAddress = false
         this.showBasicInfo = false
         this.showAddress = true
       }
+    },
+    editUser () {
+      this.showAddress = false
+      this.isAddAddress = false
+      this.isEditAddress = false
+      this.isDeleteAddress = false
+      this.showBasicInfo = false
+      this.isUploadLogo = false
+      this.isEditAccount = true
     },
     updateAccount: function (user, withoutpass) {
       if (this.user_role === 'customer') {
@@ -268,16 +334,96 @@ export default {
         }
       }
     },
-    updateAddress () {
-
-    },
-    editUser () {
-      this.showBasicInfo = false
-      this.isEditAccount = true
-    },
-    editAddress () {
+    addAddress () {
+      this.oneAddress = {
+        // customer_id: this.user_id,
+        consignee: '',
+        address: '',
+        city: '',
+        province: '',
+        country: '',
+        contact_num: '',
+        post_code: ''
+      }
       this.showAddress = false
-      this.isEditAddress = true
+      this.isUploadLogo = false
+      this.isEditAddress = false
+      this.showAddress = false
+      this.isEditAddress = false
+      this.isDeleteAddress = false
+      this.isAddAddress = true
+    },
+    createAddress (address) {
+      console.log(address)
+      CustomerService.postAddress(this.user_id, address).then(response => {
+        console.log(response.data)
+        if (response.data.data !== null) {
+          this.$router.go(0)
+          // this.editInfo('11')
+        }
+      })
+    },
+    editAddress (id) {
+      CustomerService.fetchOneAddress(id).then(response => {
+        if (response.data.data != null) {
+          this.oneAddress = {
+            consignee: response.data.data.consignee,
+            address: response.data.data.address,
+            city: response.data.data.city,
+            province: response.data.data.province,
+            country: response.data.data.country,
+            contact_num: response.data.data.contact_num,
+            post_code: response.data.data.post_code
+          }
+          this.address_id = response.data.data._id
+          console.log(this.address_id)
+          this.showAddress = false
+          this.isUploadLogo = false
+          this.isEditAddress = false
+          this.showAddress = false
+          this.isAddAddress = false
+          this.isDeleteAddress = false
+          this.isEditAddress = true
+        }
+      })
+    },
+    updateAddress (address) {
+      console.log(address)
+      CustomerService.putAddress(this.user_id, this.address_id, address).then(response => {
+        console.log(response.data)
+        if (response.data.data !== null) {
+          this.$router.go(0)
+          // this.editInfo('11')
+        }
+      })
+    },
+    deleteAddressDialog (id) {
+      this.address_id = id
+      this.showAddress = false
+      this.isUploadLogo = false
+      this.isEditAddress = false
+      this.showAddress = false
+      this.isAddAddress = false
+      this.isEditAddress = false
+      this.isDeleteAddress = true
+    },
+    removeAddress () {
+      CustomerService.deleteAddress(this.address_id).then(response => {
+        console.log(response.data)
+        if (response.data.data !== null) {
+          this.$router.go(0)
+          // this.editInfo('11')
+        }
+      })
+    },
+    cancelDialog () {
+      this.showAddress = false
+      this.isUploadLogo = false
+      this.isEditAddress = false
+      this.showAddress = true
+      this.isAddAddress = false
+      this.isEditAddress = false
+      this.isDeleteAddress = false
     }
   }
 }
