@@ -160,7 +160,7 @@ export default {
               this.$router.go(0)
               // this.$router.go(-2)
               // }, 1000)
-              this.$router.push({path: '/'})
+              this.$router.push({path: '/adminHome'})
             }
           })
         }

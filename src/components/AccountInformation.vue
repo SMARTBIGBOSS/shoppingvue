@@ -310,7 +310,8 @@ export default {
             // // }
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
-              this.$router.go(0)
+              this.editInfo('00')
+              // this.$router.go(0)
             // this.$router.push('/showAccount')
             }
           })
@@ -318,7 +319,8 @@ export default {
           CustomerService.putCustomerWithPass(this.user._id, user).then(response => {
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
-              this.$router.go(0)
+              this.editInfo('00')
+              // this.$router.go(0)
               // this.$router.push('/showAccount')
             }
           })
@@ -332,7 +334,8 @@ export default {
             // // }
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
-              this.$router.go(0)
+              this.editInfo('00')
+              // this.$router.go(0)
               // this.$router.push('/showAccount')
             }
           })
@@ -340,7 +343,8 @@ export default {
           SellerService.putSellerWithPass(this.user._id, user).then(response => {
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
-              this.$router.go(0)
+              this.editInfo('00')
+              // this.$router.go(0)
               // this.$router.push('/showAccount')
             }
           })
@@ -354,7 +358,8 @@ export default {
             // // }
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
-              this.$router.go(0)
+              this.editInfo('00')
+              // this.$router.go(0)
               // this.$router.push('/showAccount')
             }
           })
@@ -362,7 +367,8 @@ export default {
           AdminServices.putEditWithPass(this.user._id, user).then(response => {
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
-              this.$router.go(0)
+              this.editInfo('00')
+              // this.$router.go(0)
               // this.$router.push('/showAccount')
             }
           })
@@ -393,7 +399,8 @@ export default {
       CustomerService.postAddress(this.user_id, address).then(response => {
         console.log(response.data)
         if (response.data.data !== null) {
-          this.$router.go(0)
+          this.editInfo('11')
+          // this.$router.go(0)
           // this.editInfo('11')
         }
       })
@@ -427,8 +434,8 @@ export default {
       CustomerService.putAddress(this.user_id, this.address_id, address).then(response => {
         console.log(response.data)
         if (response.data.data !== null) {
-          this.$router.go(0)
-          // this.editInfo('11')
+          // this.$router.go(0)
+          this.editInfo('11')
         }
       })
     },
@@ -446,8 +453,8 @@ export default {
       CustomerService.deleteAddress(this.address_id).then(response => {
         console.log(response.data)
         if (response.data.data !== null) {
-          this.$router.go(0)
-          // this.editInfo('11')
+          // this.$router.go(0)
+          this.editInfo('11')
         }
       })
     },

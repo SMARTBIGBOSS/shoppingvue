@@ -4,14 +4,8 @@ export default {
   fetchActiveClasByType (type) {
     return Api().get(`/admin/classification/type_active/${type}`)
   },
-  fetchActiveClasByRegion (region) {
-    return Api().get(`/admin/classification/region_active/${region}`)
-  },
-  fetchClasByType (type) {
-    return Api().get(`/admin/classification/type/${type}`)
-  },
-  fetchClasByRegion (region) {
-    return Api().get(`/admin/classification/region/${region}`)
+  fetchClasByType (admin, type) {
+    return Api().get(`/admin/${admin}/classification/type/${type}`)
   },
   postClassification (admin, classi) {
     return Api().post(`/admin/${admin}/classification`, classi)
@@ -19,7 +13,7 @@ export default {
   putClassification (admin, id, classi) {
     return Api().put(`/admin/${admin}/classification/${id}`, classi)
   },
-  deleteClassification (id) {
-    return Api().delete(`/admin/classification/${id}`)
+  deleteClassification (admin, id) {
+    return Api().delete(`/admin/${admin}/classification/${id}`)
   }
 }

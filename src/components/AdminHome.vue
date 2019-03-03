@@ -39,9 +39,10 @@
                 <v-data-table :headers="classiHeaders" :items="classification" fix-header>
                   <template slot="items" slot-scope="props">
                     <!--<tr>-->
-                      <td class="text-xs-right">{{ props.item.title }}<br>{{ props.item.city }}, {{ props.item.province }}<br>{{ props.item.country }}</td>
-                      <td class="text-xs-right">{{ props.item.subtitle }}</td>
-                      <td class="text-xs-right">{{ props.item.active }}</td>
+                    <!--<td class="text-xs-right">{{ props.item.type }}</td>-->
+                    <td class="text-xs-center">{{ props.item.title }}</td>
+                    <td class="text-xs-center">{{ props.item.subtitle }}</td>
+                      <td class="text-xs-center">{{ props.item.active }}</td>
                       <td class="justify-center layout px-0">
                         <v-icon small class="mr-2" @click="editClassi(props.item)">edit</v-icon>
                         <v-icon small @click="deleteClassiDialog(props.item._id)">delete</v-icon>
@@ -52,11 +53,11 @@
             </template>
 
             <template v-if="isAddClassi">
-              <add-address-form :oneClassification="oneClassification" @classification-is-added="createClassi"></add-address-form>
+              <add-classification-form :oneClassification="oneClassification" :isAddClassi="isAddClassi" @classification-is-added="createClassi"></add-classification-form>
             </template>
 
             <template v-if="isEditClassi">
-              <edit-address-form :oneClassification="oneClassification" @classification-is-updated="updateClassi"></edit-address-form>
+              <edit-classification-form :oneClassification="oneClassification" :isEditClassi="isEditClassi" @classification-is-updated="updateClassi"></edit-classification-form>
             </template>
 
             <template v-if="isDeleteClassi">
@@ -83,9 +84,14 @@
 
 <script>
 import ClassificationServices from '../services/classificationServices'
+import EditClassification from '@/components/EditClassification'
 
 export default {
   name: 'AdminHome',
+  components: {
+    'add-classification-form': EditClassification,
+    'edit-classification-form': EditClassification
+  },
   data () {
     return {
       items: [
@@ -95,16 +101,18 @@ export default {
           title: 'Classification',
           items: [
             {title: 'Region', index: '00'},
-            {title: 'Type', index: '01'}]
+            {title: 'Category', index: '01'}
+          ]
         }
       ],
       classiHeaders: [
-        {text: 'Title', value: 'title', width: '30%'},
-        {text: 'Subtitle', value: 'subtitle', width: '50%'},
-        {text: 'Active', value: 'active', width: '20%'}
+        {text: 'Title', align: 'center', value: 'title', width: '20%'},
+        {text: 'Subtitle', align: 'center', value: 'subtitle', width: '40%'},
+        {text: 'Active', align: 'center', value: 'active', width: '20%'},
+        {text: 'Action', align: 'center', value: 'action', sortable: false, width: '20%'}
       ],
       titlemessage: '',
-      classification: {},
+      classification: [],
       oneClassification: {},
       classiId: '',
       showDetail: false,
@@ -116,13 +124,17 @@ export default {
   methods: {
     showInfo (index, title) {
       if (index === '00') {
-        ClassificationServices.fetchActiveClasByRegion(title).then(response => {
+        ClassificationServices.fetchClasByType(sessionStorage.getItem('id'), title).then(response => {
           this.classification = response.data.data
         })
+        console.log(this.classification)
         this.titlemessage = 'Region'
+        this.isAddClassi = false
+        this.isEditClassi = false
+        this.isDeleteClassi = false
         this.showDetail = true
       } else if (index === '01') {
-        ClassificationServices.fetchActiveClasByType(title).then(response => {
+        ClassificationServices.fetchClasByType(sessionStorage.getItem('id'), title).then(response => {
           this.classification = response.data.data
         })
         this.titlemessage = 'Type'
@@ -147,6 +159,7 @@ export default {
     },
     editClassi (item) {
       this.oneClassification = item
+      this.classiId = item._id
       this.showDetail = false
       this.isAddClassi = false
       this.isDeleteClassi = false
@@ -159,14 +172,42 @@ export default {
       this.isEditClassi = false
       this.isDeleteClassi = true
     },
-    createClassi () {
-
+    createClassi (classi) {
+      console.log(classi.type)
+      ClassificationServices.postClassification(sessionStorage.getItem('id'), classi).then(responds => {
+        if (responds.data.data !== null) {
+          if (classi.type === 'Region') {
+            this.showInfo('00', 'Region')
+          } else if (classi.type === 'Category') {
+            this.showInfo('01', 'Category')
+          }
+          // this.$router.go(0)
+        }
+      })
     },
-    updateClassi () {
-
+    updateClassi (classi) {
+      ClassificationServices.putClassification(sessionStorage.getItem('id'), this.classiId, classi)
+        .then(response => {
+          if (response.data.data !== null) {
+            if (classi.type === 'Region') {
+              this.showInfo('00', 'Region')
+            } else if (classi.type === 'Category') {
+              this.showInfo('01', 'Category')
+            }
+          }
+        })
     },
     removeClassi () {
-
+      ClassificationServices.deleteClassification(sessionStorage.getItem('id'), this.classiId).then(response => {
+        if (response.data.data !== null) {
+          this.isDeleteClassi = false
+          if (response.data.data.type === 'Region') {
+            this.showInfo('00', 'Region')
+          } else if (response.data.data.type === 'Category') {
+            this.showInfo('01', 'Category')
+          }
+        }
+      })
     },
     cancelDialog () {
       this.isEditClassi = false
