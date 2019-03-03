@@ -49,7 +49,7 @@ export default {
         })
     },
     updataProduct: function (product) {
-      let user = '5c6339630516b0316085e10f'
+      let user = sessionStorage.getItem('id')
       let id = this.product._id
       ProductService.putProduct(user, id, product).then(response => {
         // console.log(response.data)

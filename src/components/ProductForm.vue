@@ -33,13 +33,14 @@
 
 <script>
 import SellerServices from '../services/sellerServices'
+import ClassServices from '../services/classificationServices'
 
 export default {
   name: 'ProductForm',
   props: ['product'],
   data () {
     return {
-      user: '5c6339630516b0316085e10f',
+      user: sessionStorage.getItem('id'),
       Fproduct: this.product,
       loadForm: false,
       valid: true,
@@ -63,24 +64,16 @@ export default {
       catalogue: null,
       catalogueItems: [],
       class_region: null,
-      class_regionItems: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
-      ],
+      class_regionItems: [],
       class_type: null,
-      class_typeItems: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
-      ],
+      class_typeItems: [],
       isShow: false
     }
   },
   created () {
     this.getCatalog()
+    this.getClasType()
+    this.getClasRegion()
   },
   methods: {
     getCatalog () {
@@ -100,12 +93,33 @@ export default {
         })
       // console.log(this.catalogueItems)
     },
+    getClasType () {
+      ClassServices.fetchActiveClasByType('Category').then(response => {
+        if (response.data.data !== null) {
+          for (let i = 0; i < response.data.data.length; i++) {
+            this.class_typeItems.push({text: response.data.data[i].subtitle, value: response.data.data[i]._id})
+          }
+          // console.log(this.class_typeItems)
+        }
+      })
+    },
+    getClasRegion () {
+      ClassServices.fetchActiveClasByType('Region').then(response => {
+        if (response.data.data !== null) {
+          for (let i = 0; i < response.data.data.length; i++) {
+            this.class_regionItems.push({text: response.data.data[i].subtitle, value: response.data.data[i]._id})
+          }
+          // console.log(this.class_typeItems)
+        }
+      })
+    },
     submitProduct () {
       for (let i = 0; i < this.catalogues.length; i++) {
         if (this.catalogues[i].name === this.catalogue) {
           this.catalogueId = this.catalogues[i]._id
         }
       }
+      // console.log(this.class_type)
       // console.log(this.catalogueId)
       if (this.$refs.form.validate()) {
         // let user = '5c633960516b0316085e10f'

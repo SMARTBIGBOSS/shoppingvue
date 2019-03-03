@@ -23,7 +23,7 @@
           <!--<div class="display-1 font-weight-thin red&#45;&#45;text">{{errmsg}}</div>-->
         </v-form>
 
-        <v-form v-if="!iscustomer" ref="form" v-model="valid" lazy-validation dark>
+        <v-form v-if="isadmin && !iscustomer" ref="form" v-model="valid" lazy-validation dark>
           <v-text-field v-model="name" :counter="100" :rules="nameRules" label="Name" required></v-text-field>
 
           <v-text-field v-model="email" label="Email" required></v-text-field>
@@ -37,9 +37,6 @@
               <v-btn @click="reset">Reset</v-btn>
             </v-flex>
           </v-layout>
-
-          <v-text-field v-model="description" :rules="descriptionRules" label="Description"></v-text-field>
-
           <v-btn color="indigo lighten-2" :disabled="!valid" @click="updateUser">Update</v-btn>
         </v-form>
       </v-card-text>
@@ -50,7 +47,7 @@
 <script>
 export default {
   name: 'EditAccount',
-  props: ['user', 'isCustomer'],
+  props: ['user', 'isCustomer', 'isAdmin'],
   data () {
     return {
       valid: true,
@@ -75,7 +72,8 @@ export default {
       descriptionRules: [
         v => (v && v.length <= 200) || 'description must be less than 200 characters'
       ],
-      iscustomer: this.isCustomer
+      iscustomer: this.isCustomer,
+      isadmin: this.isAdmin
     }
   },
   methods: {
@@ -99,7 +97,7 @@ export default {
           this.$emit('user-is-updated', newUser, this.withoutpass)
           // this.$router.push('/showAccount')
         }
-      } else {
+      } else if (!(this.iscustomer || this.isadmin)) {
         if (this.withoutpass) {
           let newUser = {
             name: this.name,
@@ -115,6 +113,25 @@ export default {
             username: this.email,
             password: this.password,
             description: this.description
+          }
+          // this.user = newUser
+          this.$emit('user-is-updated', newUser, this.withoutpass)
+          // this.$router.push('/showAccount')
+        }
+      } else if (this.isadmin) {
+        if (this.withoutpass) {
+          let newUser = {
+            name: this.name,
+            username: this.email
+          }
+          // this.user = newUser
+          this.$emit('user-is-updated', newUser, this.withoutpass)
+          // this.$router.push('/showAccount')
+        } else if (!this.withoutpass) {
+          let newUser = {
+            name: this.name,
+            username: this.email,
+            password: this.password
           }
           // this.user = newUser
           this.$emit('user-is-updated', newUser, this.withoutpass)

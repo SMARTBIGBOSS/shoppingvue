@@ -7,8 +7,9 @@ import SignOut from '@/components/SignOut'
 import SellerHome from '@/components/SellerHome'
 import AddProduct from '@/components/AddProduct'
 import EditProduct from '@/components/EditProduct'
-import EditAccount from '@/components/EditAccount'
+// import EditAccount from '@/components/EditAccount'
 import AccountInformation from '@/components/AccountInformation'
+import AdminHome from '@/components/AdminHome'
 
 Vue.use(Router)
 
@@ -55,9 +56,9 @@ export default new Router({
       component: AccountInformation
     },
     {
-      path: '/editAccount',
-      name: 'EditAccount',
-      component: EditAccount
+      path: '/adminHome',
+      name: 'AdminHome',
+      component: AdminHome
     }
   ]
 })

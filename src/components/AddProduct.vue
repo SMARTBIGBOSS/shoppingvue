@@ -41,7 +41,7 @@ export default {
     //   })
     // },
     addProduct: function (product) {
-      let user = '5c6339630516b0316085e10f'
+      let user = sessionStorage.getItem('id')
       ProductService.postProduct(user, product).then(response => {
         // console.log(response.data)
       })

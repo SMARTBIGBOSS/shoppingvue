@@ -71,7 +71,7 @@
             </template>
 
             <template v-if="isEditAccount">
-              <edit-account-form :user="user" :isCustomer="isCustomer" @user-is-updated="updateAccount"></edit-account-form>
+              <edit-account-form :user="user" :isCustomer="isCustomer" :isAdmin="isAdmin" @user-is-updated="updateAccount"></edit-account-form>
             </template>
 
             <template v-if="isUploadLogo">
@@ -151,6 +151,7 @@ import EditAccount from '@/components/EditAccount'
 import EditAddress from '@/components/EditAddress'
 import CustomerService from '@/services/customerServices'
 import SellerService from '@/services/sellerServices'
+import AdminServices from '@/services/adminServices'
 
 export default {
   name: 'AccountInformation',
@@ -205,6 +206,7 @@ export default {
       showBasicInfo: true,
       showAddress: false,
       isCustomer: false,
+      isAdmin: false,
       isAddAddress: false,
       isEditAddress: false,
       isUploadLogo: false,
@@ -228,6 +230,7 @@ export default {
       this.user_role = sessionStorage.getItem('role')
       if (this.user_role === 'customer') {
         this.isCustomer = true
+        this.isAdmin = false
         CustomerService.fetchCustomer(this.user_id).then(response => {
           this.user = response.data.data
           this.userName = this.user.name
@@ -236,7 +239,17 @@ export default {
         })
       } else if (this.user_role === 'seller') {
         this.isCustomer = false
+        this.isAdmin = false
         SellerService.fetchSeller(this.user_id).then(response => {
+          this.user = response.data.data
+          console.log(this.user)
+          this.userName = this.user.name
+          this.userEmail = this.user.username
+        })
+      } else if (this.user_role === 'admin') {
+        this.isCustomer = false
+        this.isAdmin = true
+        AdminServices.fetchAdmin(this.user_id).then(response => {
           this.user = response.data.data
           console.log(this.user)
           this.userName = this.user.name
@@ -325,6 +338,28 @@ export default {
           })
         } else {
           SellerService.putSellerWithPass(this.user._id, user).then(response => {
+            if (response.data.data !== null) {
+              sessionStorage.setItem('name', user.name)
+              this.$router.go(0)
+              // this.$router.push('/showAccount')
+            }
+          })
+        }
+      } else if (this.user_role === 'admin') {
+        if (withoutpass) {
+          AdminServices.putEditWithoutPass(this.user._id, user).then(response => {
+            // console.log(response.data.data)
+            // // if (response.data.data !== null) {
+            // //   this.errmsg = response.data.errmsg
+            // // }
+            if (response.data.data !== null) {
+              sessionStorage.setItem('name', user.name)
+              this.$router.go(0)
+              // this.$router.push('/showAccount')
+            }
+          })
+        } else {
+          AdminServices.putEditWithPass(this.user._id, user).then(response => {
             if (response.data.data !== null) {
               sessionStorage.setItem('name', user.name)
               this.$router.go(0)

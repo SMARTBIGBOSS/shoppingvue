@@ -9,5 +9,14 @@ export default {
   },
   postSignout () {
     return Api().post('/logout/admin')
+  },
+  fetchAdmin (id) {
+    return Api().get(`/admin/${id}`)
+  },
+  putEditWithPass (id, admin) {
+    return Api().post(`/admin/${id}/editwithpass`, admin)
+  },
+  putEditWithoutPass (id, admin) {
+    return Api().post(`/admin/${id}/editwithoutpass`, admin)
   }
 }

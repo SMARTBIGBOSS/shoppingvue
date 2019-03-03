@@ -150,6 +150,7 @@ export default {
               this.isLogged = 'YES'
               sessionStorage.setItem('id', response.data.data._id)
               sessionStorage.setItem('role', this.role)
+              sessionStorage.setItem('name', response.data.data.name)
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
@@ -159,7 +160,7 @@ export default {
               this.$router.go(0)
               // this.$router.go(-2)
               // }, 1000)
-              this.$router.push({path: '/', query: {id: response.data.data._id, userName: response.data.data.name, role: this.role}})
+              this.$router.push({path: '/'})
             }
           })
         }
