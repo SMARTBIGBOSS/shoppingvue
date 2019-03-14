@@ -25,7 +25,7 @@
         <v-icon large>account_circle</v-icon>
         </v-btn>
 
-        <v-label @click="showAccount">{{userName}}</v-label>
+        <v-btn flat small @click="showAccount">{{userName}}</v-btn>
 
         <v-btn flat small to="/signin" v-if="isshow">Sign In</v-btn>
         <v-btn flat small to="/signout" v-if="!isshow" @click="showDialog">Sign Out</v-btn>
@@ -49,35 +49,9 @@
           <v-icon>more_vert</v-icon>
         </v-btn>
       </v-toolbar>
-      <!--<div id="scrolling-techniques" class="scroll-y" style="max-height: 600px;">-->
-        <!--<v-container style="height: 1000px;"></v-container>-->
-      <!--</div>-->
       <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
 
       <router-view/>
-
-      <!--<v-footer dark height="auto">-->
-        <!--<v-card flat tile class="indigo lighten-1 white&#45;&#45;text text-xs-center">-->
-          <!--<v-card-text>-->
-            <!--<v-btn v-for="icon in icons" :key="icon" class="mx-3 white&#45;&#45;text" icon>-->
-              <!--<v-icon size="24px">{{ icons }}</v-icon>-->
-            <!--</v-btn>-->
-          <!--</v-card-text>-->
-
-          <!--<v-card-text class="white&#45;&#45;text pt-0">-->
-            <!--Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus-->
-            <!--luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus.-->
-            <!--Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel-->
-            <!--elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.-->
-          <!--</v-card-text>-->
-
-          <!--<v-divider></v-divider>-->
-
-          <!--<v-card-text class="white&#45;&#45;text">&copy;2018 —-->
-            <!--<strong>Vuetify</strong>-->
-          <!--</v-card-text>-->
-        <!--</v-card>-->
-      <!--</v-footer>-->
       </v-app>
     </div>
     <!--<router-view/>-->
@@ -98,7 +72,7 @@ export default {
   },
   data () {
     return {
-      userName: 'UserName',
+      userName: 'Welcome',
       isLogged: 'NO',
       itemsNum: 1,
       notices: 10,
@@ -118,7 +92,13 @@ export default {
   created () {
     this.loadToolbar()
   },
+  //  watch: {
+  // this.reload()
+  //  },
   methods: {
+    // reload () {
+    //   return true
+    // },
     loadToolbar () {
       // console.log(this.$cookies.get('user'))
       if (sessionStorage.getItem('id') === null) {

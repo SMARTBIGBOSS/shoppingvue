@@ -10,11 +10,15 @@ import EditProduct from '@/components/EditProduct'
 // import EditAccount from '@/components/EditAccount'
 import AccountInformation from '@/components/AccountInformation'
 import AdminHome from '@/components/AdminHome'
+// import UploadLogo from '../components/UploadLogo'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/_empty'
+    },
     {
       path: '/',
       name: 'HelloWorld',
@@ -60,5 +64,10 @@ export default new Router({
       name: 'AdminHome',
       component: AdminHome
     }
+    // {
+    //   path: '/upload',
+    //   name: 'UploadLogo',
+    //   component: UploadLogo
+    // }
   ]
 })

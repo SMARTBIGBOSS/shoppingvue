@@ -7,6 +7,9 @@ export default {
   postSignup (seller) {
     return Api().post('/register/seller', seller)
   },
+  fetchOneClassification (id) {
+    return Api().get(`classification/${id}`)
+  },
   postAddCatalog (seller, catalog) {
     return Api().post(`/${seller}/catalogue/add`, catalog)
   },
@@ -14,7 +17,7 @@ export default {
     return Api().get(`/${seller}/catalogues`)
   },
   fetchOneCatalog (id) {
-    return Api().get(`/:seller/catalogue/${id}`)
+    return Api().get(`/seller/catalogue/${id}`)
   },
   putCatalog (seller, id, catalog) {
     return Api().put(`/${seller}/catalogue/edit/${id}`, catalog)
@@ -23,7 +26,7 @@ export default {
     return Api().delete(`/catalogue/remove/${id}`)
   },
   fetchLogo (id) {
-
+    return Api().get(`/seller/${id}/logo`)
   },
   fetchSeller (sellerId) {
     return Api().get(`/seller/${sellerId}`)

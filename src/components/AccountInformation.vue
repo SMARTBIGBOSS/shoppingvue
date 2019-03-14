@@ -54,7 +54,7 @@
                   <v-container fluid grid-list-sm>
                     <v-layout row wrap>
                       <v-flex xs4 offset-xs4>
-                        <img :src="`https://randomuser.me/api/portraits/men/22.jpg`" class="image" alt="lorem" width="100%" height="100%">
+                        <img :src="logoURL" class="image" alt="lorem" width="100%" height="100%">
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -75,6 +75,7 @@
             </template>
 
             <template v-if="isUploadLogo">
+              <edit-logo-form :originalLogo="logoURL" @logo-is-updated="updataLogo"></edit-logo-form>
             </template>
 
             <template v-if="showAddress">
@@ -152,11 +153,13 @@ import EditAddress from '@/components/EditAddress'
 import CustomerService from '@/services/customerServices'
 import SellerService from '@/services/sellerServices'
 import AdminServices from '@/services/adminServices'
+import UploadLogo from '@/components/UploadLogo'
 
 export default {
   name: 'AccountInformation',
   components: {
     'edit-account-form': EditAccount,
+    'edit-logo-form': UploadLogo,
     'edit-address-form': EditAddress,
     'add-address-form': EditAddress
   },
@@ -215,13 +218,25 @@ export default {
       user_id: '',
       userName: '',
       userEmail: '',
-      address_id: ''
+      logoURL: null,
+      address_id: '',
+      avatar: null,
+      saving: false,
+      saved: false
     }
   },
   created () {
     this.getUser()
     this.getAddress()
   },
+  // watch: {
+  //   avatar: {
+  //     handler: function () {
+  //       this.saved = false
+  //     },
+  //     deep: true
+  //   }
+  // },
   methods: {
     getUser () {
       this.user_id = sessionStorage.getItem('id')
@@ -235,8 +250,12 @@ export default {
           this.user = response.data.data
           this.userName = this.user.name
           this.userEmail = this.user.username
-          // console.log(this.user.name)
         })
+        CustomerService.fetchLogo(this.user_id).then(response => {
+          this.logoURL = response.data.data
+          console.log(this.logoURL)
+        })
+        console.log(this.logoURL)
       } else if (this.user_role === 'seller') {
         this.isCustomer = false
         this.isAdmin = false
@@ -374,6 +393,13 @@ export default {
           })
         }
       }
+    },
+    updataLogo: function (formData) {
+      CustomerService.postLogo(sessionStorage.getItem('id'), formData).then(response => {
+        if (response.data.data) {
+          this.$router.go(0)
+        }
+      })
     },
     addAddress () {
       this.oneAddress = {

@@ -3,7 +3,7 @@
     <!--<v-app>-->
     <v-container fluid>
       <v-layout row>
-        <v-flex xs4 sm3 md3>
+        <v-flex xs6 sm4 md3>
           <v-navigation-drawer permanent>
           <v-toolbar flat color="green lighten-3">
             <v-toolbar-title>Menu</v-toolbar-title>
@@ -25,7 +25,7 @@
           </v-navigation-drawer>
         </v-flex>
 
-        <v-flex xs8 md9 lg9 >
+        <v-flex xs6 md8 lg9 >
           <v-card>
             <v-card-title>
               Products
@@ -34,22 +34,19 @@
             </v-card-title>
             <v-data-table :headers="productHeaders" :items="products">
               <template slot="items" slot-scope="props" v-if="isShowData">
-                <td class="justify-center layout px-0">
-                  <v-layout align-center column>
+                <td class="py-3">
                   <v-avatar :size="40">
                     <img :src="props.item.imgPath" v-if="props.item.imgPath !== ''">
                   </v-avatar>
-                  <v-btn small color="blue lighten-2" dark @click="uploadImg">Upload Image</v-btn>
-                  </v-layout>
                 </td>
-                <td>{{ props.item.name }}</td>
+                <td class="text-xs-left">{{ props.item.name }}</td>
                 <td class="text-xs-right">{{ props.item.price }}</td>
                 <td class="text-xs-right">{{ props.item.stock }}</td>
-                <td class="text-xs-right">{{ props.item.class_region_id.subtitle }}</td>
-                <td class="text-xs-right">{{ props.item.class_type_id.subtitle }}</td>
+                <td class="text-xs-center">{{ props.item.class_region_id.subtitle }}</td>
+                <td class="text-xs-center">{{ props.item.class_type_id.subtitle }}</td>
                 <!--<td class="text-xs-right">{{ props.item.catalogue_id }}</td>-->
-                <td class="text-xs-right">{{ props.item.isShow }}</td>
-                <td class="justify-center layout px-0">
+                <td class="text-xs-center">{{ props.item.isShow }}</td>
+                <td class="py-2">
                   <v-icon small class="mr-2" @click="editProduct(props.item._id)">edit</v-icon>
                   <v-icon small @click="deleteProduct(props.item._id)">delete</v-icon>
                 </td>
@@ -129,15 +126,15 @@ export default {
       editedIndex: -1,
       editedCatalog: {name: ''},
       productHeaders: [
-        {text: 'Image', value: 'image', width: '10%'},
-        {text: 'Name', align: 'left', sortable: false, value: 'name', width: '45%'},
+        {text: 'Image', sortable: false, value: 'image', width: '15%'},
+        {text: 'Name', sortable: false, value: 'name', width: '40%'},
         {text: 'Price', value: 'price', width: '5%'},
         {text: 'Stock', value: 'stock', width: '5%'},
-        {text: 'Region', value: 'class_region_id', width: '10%'},
+        {text: 'Region', value: 'class_region_id', width: '5%'},
         {text: 'Type', value: 'class_type_id', width: '10%'},
         // {text: 'Catalogue', value: 'catalogue_id'},
         {text: 'onSale', value: 'isShow', width: '5%'},
-        {text: 'Action', value: 'action', sortable: false, width: '10%'}
+        {text: 'Action', value: 'action', sortable: false, width: '15%'}
       ],
       products: [],
       imgURL: '',
