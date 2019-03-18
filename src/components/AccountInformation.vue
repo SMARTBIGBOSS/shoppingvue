@@ -265,6 +265,10 @@ export default {
           this.userName = this.user.name
           this.userEmail = this.user.username
         })
+        SellerService.fetchLogo(this.user_id).then(response => {
+          this.logoURL = response.data.data
+          console.log(this.logoURL)
+        })
       } else if (this.user_role === 'admin') {
         this.isCustomer = false
         this.isAdmin = true

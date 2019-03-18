@@ -3,11 +3,11 @@
     <!--<v-app>-->
       <!--<v-layout justify-center>-->
         <!--<v-flex xs12 sm10 md8 lg6>-->
-    <template>
+    <template v-if="loadForm">
           <v-form ref="form" v-model="valid" lazy-validation dark>
             <v-text-field v-model="name" :counter="100" :rules="nameRules" label="Name" required></v-text-field>
 
-            <v-text-field v-model="price" :rules="priceRules" label="Price" required></v-text-field>
+            <v-text-field v-model="price" :rules="priceRules" prefix="€" label="Price" required></v-text-field>
 
             <v-text-field v-model="stock" :rules="stockRules" label="Stock" required></v-text-field>
 
@@ -22,7 +22,7 @@
             <v-layout row>
               <v-checkbox v-model="isShow" label="Is it on sale?" required></v-checkbox>
               <v-layout justify-end>
-                <v-btn flat large color="light-blue darken-2" @click="uploadImage">
+                <v-btn flat large color="light-blue darken-2" @click="editImage">
                   <v-icon>arrow_right_alt</v-icon>Edit Image
                 </v-btn>
               </v-layout>
@@ -34,6 +34,9 @@
 
           </v-form>
     </template>
+    <template v-else>
+      <upload-image @image-is-added="uploadImage"></upload-image>
+    </template>
         <!--</v-flex>-->
       <!--</v-layout>-->
     <!--</v-app>-->
@@ -43,15 +46,21 @@
 <script>
 import SellerServices from '../services/sellerServices'
 import ClassServices from '../services/classificationServices'
+import ProductServices from '../services/productServices'
+import UploadImage from '../components/UploadImage'
 
 export default {
   name: 'ProductForm',
   props: ['product'],
+  components: {
+    'upload-image': UploadImage
+  },
   data () {
     return {
+      loadForm: true,
       user: sessionStorage.getItem('id'),
       Fproduct: this.product,
-      // loadForm: false,
+      pid: this.product._id,
       valid: true,
       name: this.product.name,
       nameRules: [
@@ -87,7 +96,6 @@ export default {
     this.getAllCatalog()
     this.getAllClasType()
     this.getAllClasRegion()
-    // this.getCataAndClas()
   },
   methods: {
     getAllCatalog () {
@@ -144,10 +152,6 @@ export default {
         }
       })
     },
-    uploadImage () {
-      this.$refs.form.reset()
-      this.$router.push({})
-    },
     submitProduct () {
       // for (let i = 0; i < this.catalogues.length; i++) {
       //   if (this.catalogues[i].name === this.catalogue) {
@@ -176,6 +180,18 @@ export default {
     cancel () {
       this.$refs.form.reset()
       this.$router.go(-1)
+    },
+    editImage () {
+      this.$refs.form.reset()
+      this.loadForm = false
+    },
+    uploadImage (formData) {
+      console.log(formData)
+      ProductServices.putDetailImage(sessionStorage.getItem('id'), this.pid, formData).then(response => {
+        if (response.data.data) {
+          this.$router.push('seller_home')
+        }
+      })
     }
   }
 }

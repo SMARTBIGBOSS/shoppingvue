@@ -7,17 +7,11 @@ export default {
   postSignup (seller) {
     return Api().post('/register/seller', seller)
   },
-  fetchOneClassification (id) {
-    return Api().get(`classification/${id}`)
-  },
   postAddCatalog (seller, catalog) {
     return Api().post(`/${seller}/catalogue/add`, catalog)
   },
   fetchAllCatalog (seller) {
     return Api().get(`/${seller}/catalogues`)
-  },
-  fetchOneCatalog (id) {
-    return Api().get(`/seller/catalogue/${id}`)
   },
   putCatalog (seller, id, catalog) {
     return Api().put(`/${seller}/catalogue/edit/${id}`, catalog)

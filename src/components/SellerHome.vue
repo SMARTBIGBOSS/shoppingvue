@@ -36,7 +36,7 @@
               <template slot="items" slot-scope="props" v-if="isShowData">
                 <td class="py-3">
                   <v-avatar :size="40">
-                    <img :src="props.item.imgPath" v-if="props.item.imgPath !== ''">
+                    <img :src="props.item.detail_id.path[0]" v-if="props.item.detail_id !== null">
                   </v-avatar>
                 </td>
                 <td class="text-xs-left">{{ props.item.name }}</td>
@@ -222,19 +222,12 @@ export default {
       ProductService.getProductByCatalog(user, id).then(response => {
         this.products = response.data.data
         // console.log(response.data.data)
-        for (let i = 0; i < response.data.data.length; i++) {
-          let imgId = response.data.data[i]._id
-          ProductService.fetchMainImg(response.data.data[i]._id).then(response => {
-            if (!response.data.message) {
-              this.imgURL = 'http://localhost:3000/seller/product/' + imgId + '/mainImg'
-            } else {
-              this.imgURL = ''
-            }
-            console.log(this.imgURL)
-            this.products[i].imgPath = this.imgURL
-          })
-        }
+        // for (let i = 0; i < this.products.length; i++) {
+        //   let imgId = this.products[i].detail_id.path[0]
+        //   this.products[i].imgPath = this.imgURL
+        // }
       })
+      // console.log(this.products)
       this.isShowData = true
     },
     addProduct () {
@@ -253,9 +246,6 @@ export default {
         this.message = response.data.data
         this.getProducts(this.catalogId)
       })
-    },
-    uploadImg (id) {
-
     }
   }
 

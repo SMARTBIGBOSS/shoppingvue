@@ -2,19 +2,22 @@
   <div>
     <v-container grid-list-xl>
       <!--<image-input v-model="avatar">-->
-        <div slot="activator">
-          <!--<v-avatar size="150px" v-ripple v-model="avatar" v-if="!avatar" class="grey lighten-3 mb-3">-->
+        <div>
+          <!--<v-avatar size="150px" v-ripple v-model="avatar" v-if="!avatar" class="grey lighten-3 mb-3" @click="launchFilePicker()">-->
             <!--<span>Click to add avatar</span>-->
           <!--</v-avatar>-->
-          <v-avatar size="150px" v-ripple class="mb-3">
+          <v-avatar size="150px" v-ripple v-model="avatar" class="mb-3" @click="launchFilePicker()">
             <img :src="imageURL" alt="avatar">
           </v-avatar>
+          <p>Click to add avatar</p>
         </div>
-      <input type="file" :name="uploadFieldName" @change="onFileChange($event.target.name, $event.target.files)">
+      <input type="file" ref="file" :name="uploadFieldName" style="display:none"
+             @change="onFileChange($event.target.name, $event.target.files)">
       <!--</image-input>-->
       <v-slide-x-transition>
         <div v-if="avatar && saved == false">
           <v-btn class="primary" @click="uploadImage" :loading="saving">Save Avatar</v-btn>
+          <v-btn class="primary" @click="reset" :loading="saving">Reset</v-btn>
         </div>
       </v-slide-x-transition>
       <!-- error dialog displays any potential errors -->
@@ -60,18 +63,22 @@ export default {
   //   }
   // },
   methods: {
+    launchFilePicker () {
+      this.$refs.file.click()
+    },
     onFileChange (fieldName, files) {
       const { maxSize } = this
       this.imageFile = files[0]
       this.fieldName = fieldName
+      // console.log(fieldName)
       // check if user actually selected a file
       if (files.length > 0) {
         this.saving = true
         let size = this.imageFile.size / maxSize / maxSize
-        if (!this.imageFile.type.match('image.*')) {
+        if (!(this.imageFile.type.match('image.jpeg') || this.imageFile.type.match('image.png'))) {
           // check whether the upload is an image
           this.errorDialog = true
-          this.errorText = 'Please choose an image file'
+          this.errorText = 'Please choose an jpeg/png file'
         } else if (size > 1) {
           // check whether the size is greater than the size limit
           this.errorDialog = true
@@ -90,40 +97,19 @@ export default {
       let formData = new FormData()
       formData.append(this.fieldName, this.imageFile)
       this.$emit('logo-is-updated', formData)
+    },
+    reset () {
+      this.imageFile = null
+      this.fieldName = null
+      this.imageURL = this.originalLogo
+      this.saved = false
+      this.saving = false
+      this.avatar = true
     }
   }
 }
 </script>
 
 <style scoped>
-  .dropbox {
-    outline: 2px dashed grey; /* the dash box */
-    outline-offset: -10px;
-    background: lightcyan;
-    color: dimgray;
-    padding: 10px 10px;
-    width: 400px;
-    min-height: 200px; /* minimum height */
-    position: center;
-    cursor: pointer;
-  }
-
-  .input-file {
-    opacity: 0; /* invisible but it's there! */
-    width: 100%;
-    height: 200px;
-    position: absolute;
-    cursor: pointer;
-  }
-
-  .dropbox:hover {
-    background: lightblue; /* when mouse over to the drop zone, change color */
-  }
-
-  .dropbox p {
-    font-size: 1.2em;
-    text-align: center;
-    padding: 50px 0;
-  }
 
 </style>

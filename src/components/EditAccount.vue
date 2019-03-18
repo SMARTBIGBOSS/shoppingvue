@@ -23,10 +23,10 @@
           <!--<div class="display-1 font-weight-thin red&#45;&#45;text">{{errmsg}}</div>-->
         </v-form>
 
-        <v-form v-if="isadmin && !iscustomer" ref="form" v-model="valid" lazy-validation dark>
+        <v-form v-if="!isadmin && !iscustomer" ref="form" v-model="valid" lazy-validation dark>
           <v-text-field v-model="name" :counter="100" :rules="nameRules" label="Name" required></v-text-field>
 
-          <v-text-field v-model="email" label="Email" required></v-text-field>
+          <v-text-field v-model="email" label="Email" :rules="emailRules" required></v-text-field>
 
           <v-layout row wrap>
             <v-flex xs8>
@@ -37,6 +37,9 @@
               <v-btn @click="reset">Reset</v-btn>
             </v-flex>
           </v-layout>
+
+          <v-text-field v-model="description" :rules="descriptionRules" label="Description" required></v-text-field>
+
           <v-btn color="indigo lighten-2" :disabled="!valid" @click="updateUser">Update</v-btn>
         </v-form>
       </v-card-text>

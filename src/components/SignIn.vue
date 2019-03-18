@@ -140,7 +140,7 @@ export default {
               // setTimeout(() => {
               //   this.$router.go(0)
               // }, 1000)
-              this.$router.push({path: '/seller_home', query: {id: response.data.data._id, userName: response.data.data.name, role: this.role}})
+              this.$router.push({path: '/seller_home'})//, query: {id: response.data.data._id, userName: response.data.data.name, role: this.role}
               this.$router.go(0)
             }
           })

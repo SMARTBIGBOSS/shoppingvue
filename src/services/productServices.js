@@ -16,7 +16,7 @@ export default {
   putProduct (seller, id, product) {
     return Api().put(`/${seller}/product/edit/${id}`, product)
   },
-  fetchMainImg (id) {
-    return Api().get(`/seller/product/${id}/mainImg`)
+  putDetailImage (seller, id, images) {
+    return Api().put(`/${seller}/product/${id}/productDetail`, images)
   }
 }

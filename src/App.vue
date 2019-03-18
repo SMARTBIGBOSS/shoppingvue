@@ -21,8 +21,11 @@
         </v-spacer>
 
         <v-btn icon>
-        <v-icon slot="badge" dark small>done</v-icon>
-        <v-icon large>account_circle</v-icon>
+        <!--<v-icon slot="badge" dark small>done</v-icon>-->
+        <v-icon large v-if="!logoExist">account_circle</v-icon>
+          <v-avatar size="30px" class="mb-3" v-else>
+            <img :src="logoURL" alt="avatar">
+          </v-avatar>
         </v-btn>
 
         <v-btn flat small @click="showAccount">{{userName}}</v-btn>
@@ -59,6 +62,7 @@
 </template>
 
 <script>
+import SellerService from '@/services/sellerServices'
 import SignOut from '@/components/SignOut'
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
@@ -86,7 +90,9 @@ export default {
       dialog: false,
       isshow: true,
       user_id: '',
-      user_role: ''
+      user_role: '',
+      logoURL: '',
+      logoExist: false
     }
   },
   created () {
@@ -114,7 +120,14 @@ export default {
     },
     getLogo (id, role) {
       if (role === 'seller') {
-
+        SellerService.fetchSeller(id).then(response => {
+          if (response.data.data != null) {
+            this.logoURL = response.data.data.logo_id.path
+            this.logoExist = true
+          } else {
+            this.logoExist = false
+          }
+        })
       }
       if (role === 'customer') {
 
