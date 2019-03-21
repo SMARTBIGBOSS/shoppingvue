@@ -18,5 +18,8 @@ export default {
   },
   putDetailImage (seller, id, images) {
     return Api().put(`/${seller}/product/${id}/productDetail`, images)
+  },
+  putBodyImage (seller, id, image) {
+    return Api().put(`/${seller}/product/${id}/productBody`, image)
   }
 }

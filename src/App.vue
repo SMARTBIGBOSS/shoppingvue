@@ -24,7 +24,7 @@
         <!--<v-icon slot="badge" dark small>done</v-icon>-->
         <v-icon large v-if="!logoExist">account_circle</v-icon>
           <v-avatar size="30px" class="mb-3" v-else>
-            <img :src="logoURL" alt="avatar">
+            <img :src="logoURL">
           </v-avatar>
         </v-btn>
 

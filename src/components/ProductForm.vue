@@ -185,13 +185,20 @@ export default {
       this.$refs.form.reset()
       this.loadForm = false
     },
-    uploadImage (formData) {
-      console.log(formData)
-      ProductServices.putDetailImage(sessionStorage.getItem('id'), this.pid, formData).then(response => {
-        if (response.data.data) {
-          this.$router.push('seller_home')
-        }
-      })
+    uploadImage (formData, str) {
+      if (str === 'detail') {
+        ProductServices.putDetailImage(sessionStorage.getItem('id'), this.pid, formData).then(response => {
+          if (response.data.data) {
+            this.$router.go(-1)
+          }
+        })
+      } else if (str === 'body') {
+        ProductServices.putBodyImage(sessionStorage.getItem('id'), this.pid, formData).then(response => {
+          if (response.data.data) {
+            this.$router.go(-1)
+          }
+        })
+      }
     }
   }
 }
