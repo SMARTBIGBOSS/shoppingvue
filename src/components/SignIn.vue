@@ -72,7 +72,7 @@ export default {
       const errors = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.maxLength && errors.push('Password must be at most 30 characters long')
-      !this.$v.password.required && errors.push('Name is required.')
+      !this.$v.password.required && errors.push('Password is required')
       return errors
     },
     emailErrors () {

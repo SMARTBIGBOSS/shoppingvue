@@ -52,9 +52,8 @@
           <v-icon>more_vert</v-icon>
         </v-btn>
       </v-toolbar>
-      <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
-
-      <router-view/>
+        <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
+        <router-view/>
       </v-app>
     </div>
     <!--<router-view/>-->
@@ -63,6 +62,7 @@
 
 <script>
 import SellerService from '@/services/sellerServices'
+import CustomerService from '@/services/customerServices'
 import SignOut from '@/components/SignOut'
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
@@ -97,6 +97,7 @@ export default {
   },
   created () {
     this.loadToolbar()
+    this.getLogo()
   },
   //  watch: {
   // this.reload()
@@ -130,7 +131,14 @@ export default {
         })
       }
       if (role === 'customer') {
-
+        CustomerService.fetchCustomer(id).then(response => {
+          if (response.data.data != null) {
+            this.logoURL = response.data.data.logo_id.path
+            this.logoExist = true
+          } else {
+            this.logoExist = false
+          }
+        })
       }
     },
     showAccount () {
