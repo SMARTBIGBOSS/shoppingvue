@@ -97,16 +97,34 @@
           </v-navigation-drawer>
         </div>
         </v-flex>
-        <v-flex xs6 sm7 offset-xs0 offset-lg1>
-          <div id="advertise">
+
+        <v-flex xs6 sm7 md9>
+            <div id="advertise">
               <v-carousel height="400px">
                 <v-carousel-item v-for="(item,i) in items" :key="i">
                   <img :src="item" style="width:100%; height:100%;">
                 </v-carousel-item>
               </v-carousel>
-         </div>
+            </div>
         </v-flex>
       </v-layout>
+
+      <v-flex xs12>
+        <v-card>
+          <v-container fluid grid-list-md>
+            <v-layout row wrap>
+              <v-flex v-for="product in products" :key="product._id" v-bind="{['xs3']: true}">
+                <v-card>
+                  <v-img :src="product.detail_id.path[0]" height="200px" :aspect-ratio="1" contain/>
+                  <v-card-tittle>
+                    <div>{{product.name}}</div>
+                  </v-card-tittle>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
     </v-layout>
     </v-container>
   </div>
@@ -114,6 +132,8 @@
 
 <script>
 import ClassificationService from '@/services/classificationServices'
+import ProductService from '@/services/productServices'
+
 export default {
   name: 'HomePage',
   data () {
@@ -121,11 +141,13 @@ export default {
       items: ['/static/advertise/1.jpg', '/static/advertise/2.jpg', '/static/advertise/3.jpg',
         '/static/advertise/4.jpg', '/static/advertise/5.jpg', '/static/advertise/6.jpg'
       ],
-      categories: []
+      categories: [],
+      products: []
     }
   },
   created () {
     this.getCategory()
+    this.getProducts()
   },
   methods: {
     getCategory () {
@@ -144,6 +166,13 @@ export default {
             this.categories.push(temp[i])
           }
           // console.log(this.categories)
+        }
+      })
+    },
+    getProducts () {
+      ProductService.fetchAllProducts().then(response => {
+        if (response.data.data) {
+          this.products = response.data.data
         }
       })
     },

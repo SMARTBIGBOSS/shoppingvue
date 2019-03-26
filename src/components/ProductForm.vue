@@ -36,7 +36,10 @@
     </template>
     <template v-else>
       <upload-image @image-is-added="uploadImage"></upload-image>
+
     </template>
+    <p>{{detailmsg}}</p>
+    <p>{{bodymsg}}</p>
         <!--</v-flex>-->
       <!--</v-layout>-->
     <!--</v-app>-->
@@ -89,7 +92,9 @@ export default {
       previousClaTyp: '',
       class_type: null,
       class_typeItems: [],
-      isShow: false
+      isShow: false,
+      bodymsg: '',
+      detailmsg: ''
     }
   },
   created () {
@@ -189,14 +194,17 @@ export default {
       if (str === 'detail') {
         ProductServices.putDetailImage(sessionStorage.getItem('id'), this.pid, formData).then(response => {
           if (response.data.data) {
-            this.$router.go(-1)
+            this.detailmsg = response.data.message
           }
+          this.$router.go(-1)
         })
       } else if (str === 'body') {
         ProductServices.putBodyImage(sessionStorage.getItem('id'), this.pid, formData).then(response => {
-          if (response.data.data) {
-            this.$router.go(-1)
-          }
+          // if (response.data.data) {
+          //   this.bodymsg = response.data.message
+          // }
+          this.bodymsg = response.data.message
+          this.$router.go(-1)
         })
       }
     }

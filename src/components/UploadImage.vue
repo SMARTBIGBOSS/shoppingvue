@@ -9,7 +9,7 @@
             <span class="orange--text">You can upload multiple images as showing product's detail.</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field label="Select Image" @click='pickDetailFile' prepend-icon='attach_file' v-model="tip"
+            <v-text-field label="Select Image" @click='pickDetailFile' prepend-icon='attach_file' v-model="detailTip"
                           :append-icon="imagesURL.length ? 'send' : ''" @click:append="sendDetailImages">
             </v-text-field>
             <input type="file" style="display: none" ref="detailImage" accept="image/*"
@@ -43,7 +43,7 @@
             <span class="orange--text">You can only upload one images as explaining product.</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field label="Select Image" @click='pickBodyFile' prepend-icon='attach_file' v-model="tip"
+            <v-text-field label="Select Image" @click='pickBodyFile' prepend-icon='attach_file' v-model="bodyTip"
                           :append-icon="imageURL ? 'send' : ''" @click:append="sendBodyImage">
             </v-text-field>
             <input type="file" style="display: none" ref="bodyImage" accept="image/*"
@@ -87,9 +87,10 @@ export default {
   props: ['message'],
   data () {
     return {
-      numDetailImage: null,
-      numBodyImage: null,
-      tip: '',
+      numDetailImage: 0,
+      numBodyImage: 0,
+      bodyTip: '',
+      detailTip: '',
       fieldName: null,
       images: [],
       bodyImg: null,
@@ -126,7 +127,7 @@ export default {
           this.errorText = 'Your file is too big! Please select an image under 1MB'
         } else {
           this.numImage += 1
-          this.setTip(this.numImage)
+          this.setDetailTip(this.numImage)
           this.fieldName = fieldName
           this.images.push(files[0])
           this.imagesURL.push(URL.createObjectURL(files[0]))
@@ -149,7 +150,7 @@ export default {
           this.errorText = 'Your file is too big! Please select an image under 5MB'
         } else {
           this.numBodyImage = 1
-          this.setTip(this.numImage)
+          this.setBodyTip(this.numBodyImage)
           this.fieldName = fieldName
           this.bodyImg = files[0]
           this.imageURL = URL.createObjectURL(files[0])
@@ -163,13 +164,13 @@ export default {
       this.detailImageNames.splice(index, 1)
       this.imagesURL.splice(index, 1)
       this.numImage -= 1
-      this.setTip(this.numImage)
+      this.setDetailTip(this.numImage)
     },
     removeBody () {
       this.bodyImageName = null
       this.imageURL = null
       this.numBodyImage = 0
-      this.setTip(this.numBodyImage)
+      this.setBodyTip(this.numBodyImage)
     },
     sendDetailImages () {
       let formData = new FormData()
@@ -185,8 +186,11 @@ export default {
       // formData.append(this.fieldName, this.images)
       this.$emit('image-is-added', formData, 'body')
     },
-    setTip (number) {
-      this.tip = number + ' image(s) chose'
+    setBodyTip (number) {
+      this.bodyTip = number + ' image(s) chose'
+    },
+    setDetailTip (number) {
+      this.detailTip = number + ' image(s) chose'
     }
   }
 }

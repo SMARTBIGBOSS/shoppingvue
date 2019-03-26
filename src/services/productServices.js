@@ -13,6 +13,9 @@ export default {
   fetchOneProduct (id) {
     return Api().get(`/product/${id}`)
   },
+  fetchAllProducts () {
+    return Api().get('/products')
+  },
   putProduct (seller, id, product) {
     return Api().put(`/${seller}/product/edit/${id}`, product)
   },
