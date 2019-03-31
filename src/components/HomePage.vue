@@ -2,8 +2,8 @@
   <div class="homepage">
     <v-container fluid grid-list-md>
     <v-layout column>
-      <v-layout row>
-        <v-flex xs2>
+      <v-layout row wrap>
+        <v-flex xs6 sm4 md2>
         <div id="Asia">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <v-btn slot="activator" color="success" >Asia</v-btn>
@@ -15,7 +15,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs6 sm4 md2>
         <div id="Africa">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <v-btn slot="activator" color="success" >Africa</v-btn>
@@ -27,7 +27,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs6 sm4 md2>
         <div id="Europe">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <v-btn slot="activator" color="success" >Europe</v-btn>
@@ -39,7 +39,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs6 sm4 md2>
         <div id="NorthAmerica">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <v-btn slot="activator" color="success" >North America</v-btn>
@@ -51,7 +51,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs6 sm4 md2>
         <div id="SouthAmerica">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <v-btn slot="activator" color="success" >South America</v-btn>
@@ -63,7 +63,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs6 sm4 md2>
         <div id="Oceania">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <v-btn slot="activator" color="success" >Oceania</v-btn>
@@ -116,9 +116,9 @@
               <v-flex v-for="product in products" :key="product._id" v-bind="{['xs3']: true}">
                 <v-card>
                   <v-img :src="product.detail_id.path[0]" height="200px" :aspect-ratio="1" contain/>
-                  <v-card-tittle>
-                    <div>{{product.name}}</div>
-                  </v-card-tittle>
+                  <v-card-actions>
+                    <v-btn flat class="text-none" @click="viewProduct(product._id)">{{product.name}}</v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -175,6 +175,10 @@ export default {
           this.products = response.data.data
         }
       })
+    },
+    viewProduct (id) {
+      this.$router.params = id
+      this.$router.push('/product')
     },
     serachByRegion () {
 

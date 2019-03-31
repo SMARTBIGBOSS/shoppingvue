@@ -52,11 +52,12 @@
           <v-icon>more_vert</v-icon>
         </v-btn>
       </v-toolbar>
-        <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
+        <template>
+          <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
+        </template>
         <router-view/>
       </v-app>
     </div>
-    <!--<router-view/>-->
   </div>
 </template>
 
@@ -99,9 +100,11 @@ export default {
     this.loadToolbar()
     this.getLogo()
   },
-  //  watch: {
-  // this.reload()
-  //  },
+  // watch: {
+  //   userName () {
+  //     console.log(this.userName())
+  //   }
+  // },
   methods: {
     // reload () {
     //   return true

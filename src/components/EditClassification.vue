@@ -45,6 +45,7 @@ export default {
 
   methods: {
     updateClassi () {
+      console.log(this.type)
       if (this.type === '' || this.title === '' || this.subtitle === '' || this.active === '') {
         this.valid = false
       } else {
@@ -59,7 +60,7 @@ export default {
           this.$emit('classification-is-added', newClassi)
           this.valid = false
         } else if (this.isEdit) {
-          this.$emit('edit-classification-form', newClassi)
+          this.$emit('classification-is-updated', newClassi)
           this.valid = false
         }
       }

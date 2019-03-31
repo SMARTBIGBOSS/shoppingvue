@@ -4,7 +4,7 @@
       <v-flex xs12 sm10 md8 lg6>
         <template v-if="childDataLoaded">
         <v-card>
-          <v-card-title>
+          <v-card-title class="headline">
             {{messagetitle}}
             <v-spacer></v-spacer>
           </v-card-title>

@@ -10,6 +10,7 @@ import EditProduct from '@/components/EditProduct'
 // import EditAccount from '@/components/EditAccount'
 import AccountInformation from '@/components/AccountInformation'
 import AdminHome from '@/components/AdminHome'
+import ProductPage from '@/components/ProductPage'
 // import UploadLogo from '../components/UploadLogo'
 
 Vue.use(Router)
@@ -60,11 +61,11 @@ export default new Router({
       path: '/adminHome',
       name: 'AdminHome',
       component: AdminHome
+    },
+    {
+      path: '/product',
+      name: 'ProductPage',
+      component: ProductPage
     }
-    // {
-    //   path: '/upload',
-    //   name: 'UploadLogo',
-    //   component: UploadLogo
-    // }
   ]
 })

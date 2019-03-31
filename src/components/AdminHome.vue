@@ -127,7 +127,7 @@ export default {
         ClassificationServices.fetchClasByType(sessionStorage.getItem('id'), title).then(response => {
           this.classification = response.data.data
         })
-        console.log(this.classification)
+        // console.log(this.classification)
         this.titlemessage = 'Region'
         this.isAddClassi = false
         this.isEditClassi = false
@@ -173,7 +173,7 @@ export default {
       this.isDeleteClassi = true
     },
     createClassi (classi) {
-      console.log(classi.type)
+      // console.log(classi.type)
       ClassificationServices.postClassification(sessionStorage.getItem('id'), classi).then(responds => {
         if (responds.data.data !== null) {
           if (classi.type === 'Region') {
@@ -188,6 +188,7 @@ export default {
     updateClassi (classi) {
       ClassificationServices.putClassification(sessionStorage.getItem('id'), this.classiId, classi)
         .then(response => {
+          console.log(response.data.data)
           if (response.data.data !== null) {
             if (classi.type === 'Region') {
               this.showInfo('00', 'Region')

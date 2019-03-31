@@ -126,8 +126,8 @@ export default {
           this.errorDialog = true
           this.errorText = 'Your file is too big! Please select an image under 1MB'
         } else {
-          this.numImage += 1
-          this.setDetailTip(this.numImage)
+          this.numDetailImage += 1
+          this.setDetailTip(this.numDetailImage)
           this.fieldName = fieldName
           this.images.push(files[0])
           this.imagesURL.push(URL.createObjectURL(files[0]))
@@ -163,7 +163,7 @@ export default {
       let index = this.detailImageNames.indexOf(item)
       this.detailImageNames.splice(index, 1)
       this.imagesURL.splice(index, 1)
-      this.numImage -= 1
+      this.numDetailImage -= 1
       this.setDetailTip(this.numImage)
     },
     removeBody () {
