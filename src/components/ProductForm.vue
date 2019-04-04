@@ -9,6 +9,8 @@
 
             <v-text-field v-model="price" :rules="priceRules" prefix="€" label="Price" required></v-text-field>
 
+            <v-text-field v-model="shipping_price" :rules="shippingPriceRules" prefix="€" label="Shipping Price" required></v-text-field>
+
             <v-text-field v-model="stock" :rules="stockRules" label="Stock" required></v-text-field>
 
             <v-select v-model="catalogue" :items="catalogueItems" :rules="[v => !!v || 'This field is required']"
@@ -74,6 +76,11 @@ export default {
       priceRules: [
         v => !!v || 'Price is required',
         v => /[0-9]\d*.\d*|0\.\d*[1-9]\d*|[1-9]\d*|0/.test(v) || 'Price must be valid'
+      ],
+      shipping_price: this.product.shipping_price,
+      shippingPriceRules: [
+        v => !!v || 'Shipping price is required',
+        v => /[0-9]\d*.\d*|0\.\d*[1-9]\d*|[1-9]\d*|0/.test(v) || 'Shipping price must be valid'
       ],
       stock: this.product.stock,
       stockRules: [
@@ -170,6 +177,7 @@ export default {
         let newProduct = {
           name: this.name,
           price: this.price,
+          shipping_price: this.shipping_price,
           stock: this.stock,
           class_type_id: this.class_type,
           class_region_id: this.class_region,

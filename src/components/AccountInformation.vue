@@ -87,32 +87,18 @@
                 </v-card-title>
                 <v-data-table :headers="addressHeaders" :items="addresses" fix-header>
                   <template slot="items" slot-scope="props">
-                    <!--<td class="justify-center layout px-0">-->
-                      <!--<v-avatar :size="40">-->
-                        <!--<img :src="props.item.imgPath" v-if="props.item.imgPath !== ''">-->
-                      <!--</v-avatar>-->
-                    <!--</td>-->
                     <tr>
-                    <td>{{ props.item.consignee }}</td>
+                    <td>{{ props.item.firstName }} {{props.item.lastName}}</td>
                     <td class="text-xs-right">{{ props.item.address }}<br>{{ props.item.city }}, {{ props.item.province }}<br>{{ props.item.country }}</td>
-                    <!--<td class="text-xs-right">{{ props.item.city }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.province }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.country }}</td>-->
-                    <!--<td class="text-xs-right">{{ props.item.catalogue_id }}</td>-->
                     <td class="text-xs-right">{{ props.item.contact_num }}</td>
+                    <td class="text-xs-right">{{ props.item.email }}</td>
                     <td class="text-xs-right">{{ props.item.post_code }}</td>
                     <td class="justify-center layout px-0">
                       <v-icon small class="mr-2" @click="editAddress(props.item._id)">edit</v-icon>
                       <v-icon small @click="deleteAddressDialog(props.item._id)">delete</v-icon>
                     </td>
                     </tr>
-                    <!--<td>-->
-                      <!--<v-btn color="blue lighten-2" dark @click="uploadImg">Upload Image</v-btn>-->
-                    <!--</td>-->
                   </template>
-                  <!--<v-alert slot="no-results" :value="true" color="error" icon="warning">-->
-                  <!--Your search for "{{ search }}" found no results.-->
-                  <!--</v-alert>-->
                 </v-data-table>
               </v-card>
             </template>
@@ -199,10 +185,8 @@ export default {
       addressHeaders: [
         {text: 'Consignee', value: 'consignee', width: '10%'},
         {text: 'Address', align: 'left', sortable: false, value: 'address', width: '50%'},
-        // {text: 'Town/City', value: 'city'},
-        // {text: 'Province/County/State', value: 'province'},
-        // {text: 'Country', value: 'country'},
-        {text: 'Contact Number', value: 'contact_num', sortable: false, width: '20%'},
+        {text: 'Contact Number', value: 'contact_num', sortable: false, width: '10%'},
+        {text: 'Email', value: 'email', sortable: false, width: '10%'},
         {text: 'Post Code', value: 'post_code', sortable: false, width: '10%'},
         {text: 'Action', value: 'action', sortable: false, width: '10%'}
       ],
@@ -408,7 +392,8 @@ export default {
     addAddress () {
       this.oneAddress = {
         // customer_id: this.user_id,
-        consignee: '',
+        firstName: '',
+        lastName: '',
         address: '',
         city: '',
         province: '',
@@ -429,9 +414,8 @@ export default {
       CustomerService.postAddress(this.user_id, address).then(response => {
         console.log(response.data)
         if (response.data.data !== null) {
-          this.editInfo('11')
-          // this.$router.go(0)
           // this.editInfo('11')
+          this.$router.go(0)
         }
       })
     },
@@ -439,7 +423,8 @@ export default {
       CustomerService.fetchOneAddress(id).then(response => {
         if (response.data.data != null) {
           this.oneAddress = {
-            consignee: response.data.data.consignee,
+            firstName: response.data.data.firstName,
+            lastName: response.data.data.lastName,
             address: response.data.data.address,
             city: response.data.data.city,
             province: response.data.data.province,
@@ -464,8 +449,8 @@ export default {
       CustomerService.putAddress(this.user_id, this.address_id, address).then(response => {
         console.log(response.data)
         if (response.data.data !== null) {
-          // this.$router.go(0)
-          this.editInfo('11')
+          // this.editInfo('11')
+          this.$router.go(0)
         }
       })
     },
@@ -483,8 +468,8 @@ export default {
       CustomerService.deleteAddress(this.address_id).then(response => {
         console.log(response.data)
         if (response.data.data !== null) {
-          // this.$router.go(0)
-          this.editInfo('11')
+          // this.editInfo('11')
+          this.$router.go(0)
         }
       })
     },

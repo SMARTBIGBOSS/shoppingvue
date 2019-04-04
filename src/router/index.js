@@ -11,6 +11,8 @@ import EditProduct from '@/components/EditProduct'
 import AccountInformation from '@/components/AccountInformation'
 import AdminHome from '@/components/AdminHome'
 import ProductPage from '@/components/ProductPage'
+import Transaction from '@/components/Transaction'
+// import PayPal from '@/components/PayPal'
 // import UploadLogo from '../components/UploadLogo'
 
 Vue.use(Router)
@@ -66,6 +68,16 @@ export default new Router({
       path: '/product',
       name: 'ProductPage',
       component: ProductPage
+    },
+    {
+      path: '/product/transaction',
+      name: 'Transaction',
+      component: Transaction
     }
+    // {
+    //   path: '/success',
+    //   name: 'PayPal',
+    //   component: PayPal
+    // }
   ]
 })

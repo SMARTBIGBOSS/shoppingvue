@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div id="sellerhome">
     <!--<v-app>-->
     <v-container fluid>
@@ -13,7 +13,7 @@
           </v-toolbar>
             <v-divider></v-divider>
           <v-data-table :items="catalogs" class="elevation-1" hide-headers hide-actions>
-            <template slot="items" slot-scope="props">
+            <template v-slot:items="props">
               <!--<td class="text-xs-left">{{ props.item._id }}</td>-->
               <td class="text-xs-left" @click="getProducts(props.item._id)">{{ props.item.name }}</td>
               <td class="justify-center layout px-0">
@@ -26,14 +26,16 @@
         </v-flex>
 
         <v-flex xs6 md8 lg9 >
+          <div>
           <v-card>
             <v-card-title>
               Products
               <v-spacer></v-spacer>
               <v-btn color="blue lighten-2" dark @click="addProduct">Add</v-btn>
             </v-card-title>
-            <v-data-table :headers="productHeaders" :items="products">
-              <template slot="items" slot-scope="props" v-if="isShowData">
+            <v-data-table :headers="productHeaders" :items="products" :expand="expand" item-key="_id">
+              <template v-slot:items="props" v-if="isShowData">
+                <tr @click="props.expanded = !props.expanded">
                 <td class="py-3">
                   <v-avatar :size="40">
                     <img :src="props.item.detail_id.path[0]" v-if="props.item.detail_id !== null">
@@ -50,15 +52,23 @@
                   <v-icon small class="mr-2" @click="editProduct(props.item._id)">edit</v-icon>
                   <v-icon small @click="deleteProduct(props.item._id)">delete</v-icon>
                 </td>
+                </tr>
                 <!--<td>-->
                   <!--<v-btn small color="blue lighten-2" dark @click="uploadImg">Upload Image</v-btn>-->
                 <!--</td>-->
+              </template>
+              <template slot="expand" slot-scope="props">
+              <!--<template v-slot:expand="props">-->
+                <v-card flat>
+                  <v-card-text class="text-xs-left">Shipping Price: € {{ props.item.shipping_price }}</v-card-text>
+                </v-card>
               </template>
               <!--<v-alert slot="no-results" :value="true" color="error" icon="warning">-->
                 <!--Your search for "{{ search }}" found no results.-->
               <!--</v-alert>-->
             </v-data-table>
           </v-card>
+          </div>
         </v-flex>
 
         <v-dialog v-model="catalogDialog" max-width="500px">
@@ -118,6 +128,7 @@ export default {
   },
   data () {
     return {
+      expand: false,
       test: [],
       catalogs: [],
       catalogId: '',
