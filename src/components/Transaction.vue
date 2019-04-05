@@ -111,10 +111,11 @@
               </v-form>
             </v-card-text>
             <v-card-actions>
-              <template v-if="isLoaded">
-                <paypal :amount="total" :item="targetProduct"></paypal>
+              <v-btn v-if="!toPay" class="text-none" color="blue lighten-2" :disabled="!valid" @click="confirmOrder">Confirm order</v-btn>
+              <v-spacer></v-spacer>
+              <template v-if="toPay">
+                <paypal :amount="total" :item="targetProduct" :shipping="shipping"></paypal>
               </template>
-              <!--<v-btn class="text-none" color="blue lighten-2" :disabled="!valid" @click="confirmOrder">Confirm order</v-btn>-->
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -146,7 +147,9 @@ export default {
       // error: false,
       // success: false,
       isLoaded: false,
+      toPay: false,
       targetProduct: '',
+      shipping: {},
       productImg: this.$route.params.img,
       productInfo: null,
       quantity: this.$route.params.quantity,
@@ -163,6 +166,7 @@ export default {
       city: '',
       province: '',
       country: '',
+      country_code: '',
       contact_num: '',
       post_code: ''
     }
@@ -188,7 +192,7 @@ export default {
             {text: 'Subtotal', value: this.targetProduct.price},
             {text: 'Shipping', value: this.targetProduct.shipping_price}
           ]
-          this.total = (this.targetProduct.price * parseInt(this.quantity, 10)).toString()
+          this.total = (this.targetProduct.shipping_price + this.targetProduct.price * parseInt(this.quantity, 10)).toString()
           this.isLoaded = true
           // console.log(this.targetProduct)
         } else {
@@ -196,39 +200,26 @@ export default {
           this.isLoaded = false
         }
       })
+    },
+    confirmOrder () {
+      if (this.country === 'Ireland') {
+        this.country_code = 'IE'
+      } else if (this.country === 'China') {
+        this.country_code = 'C2'
+      }
+      let name = this.firstName + ' ' + this.lastName
+      this.shipping = {
+        recipient_name: name,
+        address: this.address,
+        city: this.city,
+        province: this.province,
+        country: this.country_code,
+        postal_code: this.post_code,
+        contact_num: this.contact_num
+      }
+      // console.log(this.shipping)
+      this.toPay = true
     }
-    // confirmOrder () {
-    //   let transaction = {
-    //     customerId: sessionStorage.getItem('id'),
-    //     // firstName: this.firstName,
-    //     // lastName: this.lastName,
-    //     // address: this.address,
-    //     // city: this.city,
-    //     // province: this.province,
-    //     // country: this.country,
-    //     // post_code: this.post_code,
-    //     // contact_num: this.contact_num,
-    //     product_id: this.targetProduct._id,
-    //     product_name: this.targetProduct.name,
-    //     // product_stock: this.targetProduct.stock,
-    //     product_price: this.targetProduct.price,
-    //     quantity: this.quantity,
-    //     shipping_price: this.targetProduct.shipping_price,
-    //     total: this.total
-    //   }
-    //   console.log(transaction)
-    //   TransactionService.createPayment(sessionStorage.getItem('id'), transaction).then(response => {
-    //     if (response.data.link) {
-    //       let url = response.data.link
-    //       console.log(url)
-    //       window.location.href = url
-    //       // this.$router.push(url)
-    //     }
-    //   }).catch(error => {
-    //     this.errors.push(error)
-    //     console.log(error)
-    //   })
-    // }
   }
 }
 </script>
