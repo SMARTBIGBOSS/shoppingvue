@@ -81,7 +81,6 @@
                                   label="Last name" required outline></v-text-field>
                   </v-flex>
                 </v-layout>
-
                 <v-text-field v-model="address" :rules="[() => !!address || 'This field is required']"
                               label="Address" required outline></v-text-field>
                 <v-layout row>
@@ -94,7 +93,6 @@
                                   label="Province/Territory/County/State" required outline></v-text-field>
                   </v-flex>
                 </v-layout>
-
                 <v-layout row>
                   <v-flex xs12 md6>
                     <v-text-field v-model="city" :rules="[() => !!city || 'This field is required']"
@@ -108,15 +106,20 @@
 
                 <v-text-field v-model="contact_num" :rules="[() => !!contact_num || 'This field is required']"
                               label="Contact Number" required outline></v-text-field>
+                <v-btn v-if="!toPay" class="text-none" color="blue lighten-2" :disabled="!valid" @click="confirmOrder">Confirm order</v-btn>
+                <v-spacer></v-spacer>
+                <template v-if="toPay">
+                  <paypal :amount="total" :item="targetProduct" :shipping="shipping"></paypal>
+                </template>
               </v-form>
             </v-card-text>
-            <v-card-actions>
-              <v-btn v-if="!toPay" class="text-none" color="blue lighten-2" :disabled="!valid" @click="confirmOrder">Confirm order</v-btn>
-              <v-spacer></v-spacer>
-              <template v-if="toPay">
-                <paypal :amount="total" :item="targetProduct" :shipping="shipping"></paypal>
-              </template>
-            </v-card-actions>
+            <!--<v-card-actions>-->
+              <!--<v-btn v-if="!toPay" class="text-none" color="blue lighten-2" :disabled="!valid" @click="confirmOrder">Confirm order</v-btn>-->
+              <!--<v-spacer></v-spacer>-->
+              <!--<template v-if="toPay">-->
+                <!--<paypal :amount="total" :item="targetProduct" :shipping="shipping"></paypal>-->
+              <!--</template>-->
+            <!--</v-card-actions>-->
           </v-card>
         </v-flex>
     </v-layout>
@@ -133,19 +136,6 @@ export default {
   name: 'Transaction',
   data () {
     return {
-      // paypal: {
-      //   sandbox: 'AdLgswqL1fNcvq_WN6I0MUrGQAh6GQipmTesnnxyE6UJHae_MKG9NaY3R7GBA11WZ90nF8noLkstjsxr'
-      // },
-      // currency: 'EUR',
-      // myStyle: {
-      //   label: 'paypal',
-      //   size: 'medium',
-      //   shape: 'pill',
-      //   color: 'gold',
-      //   tagline: false
-      // },
-      // error: false,
-      // success: false,
       isLoaded: false,
       toPay: false,
       targetProduct: '',
@@ -156,6 +146,7 @@ export default {
       total: '',
       errorMsg: '',
       valid: true,
+      formHasErrors: false,
       countries: [
         'China',
         'Ireland'
@@ -175,6 +166,20 @@ export default {
     // PayPal
     'paypal': Paypal
   },
+  // computed: {
+  //   form () {
+  //     return {
+  //       firstName: this.firstName,
+  //       lastName: this.lastName,
+  //       address: this.address,
+  //       city: this.city,
+  //       province: this.province,
+  //       country: this.country,
+  //       contact_num: this.contact_num,
+  //       post_code: this.post_code
+  //     }
+  //   }
+  // },
   created () {
     this.getProduct()
   },
@@ -202,23 +207,36 @@ export default {
       })
     },
     confirmOrder () {
-      if (this.country === 'Ireland') {
-        this.country_code = 'IE'
-      } else if (this.country === 'China') {
-        this.country_code = 'C2'
+      // console.log(this.firstName)
+      // this.formHasErrors = false
+      //
+      // Object.keys(this.form).forEach(f => {
+      //   if (!this.form[f]) this.formHasErrors = true
+      // })
+      console.log(this.$refs.form.validate())
+      if (!this.$refs.form.validate()) {
+        // this.snackbar = true
+        this.valid = false
+        this.toPay = false
+      } else {
+        if (this.country === 'Ireland') {
+          this.country_code = 'IE'
+        } else if (this.country === 'China') {
+          this.country_code = 'C2'
+        }
+        let name = this.firstName + ' ' + this.lastName
+        this.shipping = {
+          recipient_name: name,
+          address: this.address,
+          city: this.city,
+          province: this.province,
+          country: this.country_code,
+          postal_code: this.post_code,
+          contact_num: this.contact_num
+        }
+        // console.log(this.shipping)
+        this.toPay = true
       }
-      let name = this.firstName + ' ' + this.lastName
-      this.shipping = {
-        recipient_name: name,
-        address: this.address,
-        city: this.city,
-        province: this.province,
-        country: this.country_code,
-        postal_code: this.post_code,
-        contact_num: this.contact_num
-      }
-      // console.log(this.shipping)
-      this.toPay = true
     }
   }
 }

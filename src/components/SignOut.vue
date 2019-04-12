@@ -1,5 +1,5 @@
 <template>
-  <div id="signout" data-app>
+  <div id="signout">
     <!--<v-app>-->
       <v-layout row justify-center>
         <v-dialog v-model="dialog" persistent max-width="290">
@@ -37,7 +37,7 @@ export default {
     cancelDialog () {
       this.openStatus = false
       this.$emit('update-dialog', this.openStatus)
-      this.$router.push('/')
+      // this.$router.push('/')
     },
     signOut () {
       adminService.postSignout().then(response => {

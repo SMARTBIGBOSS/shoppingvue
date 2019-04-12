@@ -12,8 +12,7 @@ import AccountInformation from '@/components/AccountInformation'
 import AdminHome from '@/components/AdminHome'
 import ProductPage from '@/components/ProductPage'
 import Transaction from '@/components/Transaction'
-// import PayPal from '@/components/PayPal'
-// import UploadLogo from '../components/UploadLogo'
+import Orders from '@/components/OrderList'
 
 Vue.use(Router)
 
@@ -73,11 +72,11 @@ export default new Router({
       path: '/product/transaction',
       name: 'Transaction',
       component: Transaction
+    },
+    {
+      path: '/transactions',
+      name: 'Orders',
+      component: Orders
     }
-    // {
-    //   path: '/success',
-    //   name: 'PayPal',
-    //   component: PayPal
-    // }
   ]
 })

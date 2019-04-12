@@ -4,7 +4,10 @@ export default {
   executePayment (customerId, payment) {
     return Api().post(`/${customerId}/product/executepayment`, payment)
   },
-  successPayment () {
-    return Api().get('/success')
+  fetchByCustomer (customer) {
+    return Api().get(`/${customer}/orders`)
+  },
+  fetchBySeller (seller) {
+    return Api().get(`/${seller}/orderslist`)
   }
 }

@@ -104,7 +104,8 @@ export default {
                   shipping: this.item.shipping_price.toString()
                 }
               },
-              description: this.item._id
+              description: this.item._id,
+              custom: this.item.seller_id._id
             }
           ]
         }

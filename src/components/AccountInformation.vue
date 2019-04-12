@@ -54,7 +54,7 @@
                   <v-container fluid grid-list-sm>
                     <v-layout row wrap>
                       <v-flex xs4 offset-xs4>
-                        <img :src="logoURL" class="image" alt="lorem" width="100%" height="100%">
+                        <img :src="logoURL" class="image" width="100%" height="100%">
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -165,7 +165,7 @@ export default {
         },
         {
           index: '1',
-          action: 'school',
+          action: 'airport_shuttle',
           title: 'Shipping Address',
           items: [
             {title: 'Address', index: '11'}

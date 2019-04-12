@@ -3,7 +3,7 @@
     <v-container fluid grid-list-md>
       <v-layout column>
         <v-layout row>
-          <v-flex xs12 md10 wrap>
+          <v-flex xs12 sm10 wrap>
             <v-card v-if="isload">
               <v-layout>
               <v-flex xs12 md5>
@@ -38,7 +38,7 @@
               </v-layout>
             </v-card>
           </v-flex>
-          <v-flex xs12 md2>
+          <v-flex xs12 sm2>
             <v-card>
               <v-card-title>Contact Seller</v-card-title>
             </v-card>
