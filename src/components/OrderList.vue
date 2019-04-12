@@ -3,11 +3,12 @@
     <v-container fluid>
       <v-layout row>
         <v-flex xs12>
+          <template v-if="isOrderField">
           <v-card v-if="isCuatomer">
               <v-card-title class="display-1 pl-3 pt-3">Order List</v-card-title>
               <v-data-table :headers="orderHeaders1" :items="orders" item-key="_id">
                 <template v-if="isShowData"  v-slot:items="props">
-                  <tr @click="viewShippingTrack">
+                  <tr @click="viewShippingTrack(props.item)">
                     <td class="py-3">
                       <v-avatar :size="60">
                         <img :src="props.item.product_id.detail_id.path[0]" v-if="props.item.detail_id !== null">
@@ -26,7 +27,7 @@
             <v-card-title class="display-1 pl-3 pt-3">Order List</v-card-title>
             <v-data-table :headers="orderHeaders2" :items="orders" item-key="_id">
               <template v-if="isShowData"  v-slot:items="props">
-                <tr @click="viewShippingTrack">
+                <tr @click="goShipping(props.item)">
                   <td class="py-3">
                     <v-avatar :size="60">
                       <img :src="props.item.product_id.detail_id.path[0]" v-if="props.item.detail_id !== null">
@@ -42,6 +43,13 @@
               </template>
             </v-data-table>
           </v-card>
+          </template>
+          <template v-if="isTrack">
+            <tracking :transaction="order"></tracking>
+          </template>
+          <template v-if="isShip">
+            <shipping :transaction="order"></shipping>
+          </template>
         </v-flex>
       </v-layout>
     </v-container>
@@ -50,8 +58,14 @@
 
 <script>
 import TransactionService from '@/services/transactionServices'
+import ShippingTrack from '@/components/ShippingTrack'
+import Logistics from '@/components/Logistics'
 export default {
   name: 'Orders',
+  components: {
+    'tracking': ShippingTrack,
+    'shipping': Logistics
+  },
   data () {
     return {
       orderHeaders1: [
@@ -72,8 +86,12 @@ export default {
         {text: 'Date', value: 'last_edit', width: '15%'}
       ],
       orders: [],
+      order: null,
+      isOrderField: false,
       isShowData: false,
-      isCuatomer: false
+      isCuatomer: false,
+      isTrack: false,
+      isShip: false
     }
   },
   created () {
@@ -87,6 +105,7 @@ export default {
             this.orders = response.data.data
             this.isCuatomer = false
             this.isShowData = true
+            this.isOrderField = true
             // console.log(this.orders)
           }
         })
@@ -96,13 +115,19 @@ export default {
             this.orders = response.data.data
             this.isCuatomer = true
             this.isShowData = true
+            this.isOrderField = true
             // console.log(this.orders)
           }
         })
       }
     },
-    viewShippingTrack () {
-
+    viewShippingTrack (item) {
+      this.order = item
+    },
+    goShipping (item) {
+      this.order = item
+      this.isOrderField = false
+      this.isShip = true
     }
   }
 }

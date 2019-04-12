@@ -132,6 +132,7 @@ import ProductService from '@/services/productServices'
 // import TransactionService from '@/services/transactionServices'
 import Paypal from '@/components/PayPal'
 // import PayPal from 'vue-paypal-checkout'
+import {countryMap, findContry} from '@/configuration/countryConfig_en'
 export default {
   name: 'Transaction',
   data () {
@@ -219,11 +220,13 @@ export default {
         this.valid = false
         this.toPay = false
       } else {
-        if (this.country === 'Ireland') {
-          this.country_code = 'IE'
-        } else if (this.country === 'China') {
-          this.country_code = 'C2'
-        }
+        this.country_code = findContry(countryMap, this.country)
+        console.log(this.country_code)
+        // if (this.country === 'Ireland') {
+        //   this.country_code = 'IE'
+        // } else if (this.country === 'China') {
+        //   this.country_code = 'C2'
+        // }
         let name = this.firstName + ' ' + this.lastName
         this.shipping = {
           recipient_name: name,
