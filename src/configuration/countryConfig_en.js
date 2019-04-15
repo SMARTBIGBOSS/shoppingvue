@@ -2,7 +2,8 @@ let countryMap = {
   AL: 'Albania',
   DZ: 'Algeria',
   C2: 'China',
-  IE: 'Ireland'
+  IE: 'Ireland',
+  US: 'United States'
 }
 
 function findContry (obj, value, compare = (a, b) => a === b) {

@@ -149,8 +149,7 @@ export default {
       valid: true,
       formHasErrors: false,
       countries: [
-        'China',
-        'Ireland'
+        'Albania', 'Algeria', 'China', 'Ireland', 'United States'
       ],
       firstName: '',
       lastName: '',

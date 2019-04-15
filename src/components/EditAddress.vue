@@ -49,8 +49,7 @@ export default {
       email: this.oneAddress.email,
       post_code: this.oneAddress.post_code,
       countries: [
-        'China',
-        'Ireland'
+        'Albania', 'Algeria', 'China', 'Ireland', 'United States'
       ],
       isAdd: this.isAddAddress,
       isEdit: this.isEditAddress,

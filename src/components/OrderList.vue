@@ -45,10 +45,10 @@
           </v-card>
           </template>
           <template v-if="isTrack">
-            <tracking :transaction="order"></tracking>
+            <tracking :transaction="order" @reset-Order-field="resetOrderCard"></tracking>
           </template>
           <template v-if="isShip">
-            <shipping :transaction="order"></shipping>
+            <shipping :transaction="order" @reset-Order-field="resetOrderCard"></shipping>
           </template>
         </v-flex>
       </v-layout>
@@ -123,11 +123,21 @@ export default {
     },
     viewShippingTrack (item) {
       this.order = item
+      this.isOrderField = false
+      this.isTrack = true
     },
     goShipping (item) {
       this.order = item
       this.isOrderField = false
       this.isShip = true
+    },
+    resetOrderCard (isFinish) {
+      if (isFinish) {
+        this.$router.go(0)
+        // this.isTrack = false
+        // this.isShip = false
+        // this.isOrderField = true
+      }
     }
   }
 }
