@@ -2,7 +2,7 @@
   <div id="shippingtrack">
     <v-layout row warp>
       <v-flex xs12 md10 offset-md1>
-        <v-card>
+        <v-card v-if="show">
           <v-card-title class="headline pl-3 pt-3">
             <v-btn flat @click="back">
               <v-icon x-large color="blue darken-2">arrow_back</v-icon>
@@ -30,7 +30,10 @@
                 <div class="text-xs-left subheading">Payment Statue: {{trans.payment_statue}}</div>
               </v-flex>
               <v-flex xs12 sm6>
-                <div class="text-xs-left subheading">Shipping: {{shippingID}}</div>
+                <div class="text-xs-left subheading">Tracking Number: {{trackingNum}}</div>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <div class="text-xs-left subheading">Carrier: {{carrier}}</div>
               </v-flex>
               <v-flex xs12 sm6>
                 <div class="text-xs-left subheading">Shipping Statue: {{trans.shipping_statue}}</div>
@@ -74,13 +77,18 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
-            <!--<v-timeline>-->
-              <!--<v-timeline-item-->
-                <!--v-for="(year, i) in trackingInfo"-->
-                <!--:key="i"-->
-                <!--:color="year.color"-->
-                <!--small-->
-              <!--&gt;-->
+            <v-card-title>Select Country</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-timeline align-top dense>
+                <v-timeline-item v-for="(track, i) in trackingInfo" :key="i" :color="track.color" :icon="track.icon">
+                  <v-layout pt-3>
+                    <v-flex xs12 sm3 text-xs-left v-text="track.Date"></v-flex>
+                    <v-flex xs12 sm9 text-xs-left v-text="track.StatusDescription"></v-flex>
+                  </v-layout>
+                </v-timeline-item>
+              </v-timeline>
+            </v-card-text>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -92,6 +100,7 @@
 import CustomerService from '@/services/customerServices'
 import ShippingService from '@/services/shippingServices'
 import {countryMap} from '@/configuration/countryConfig_en'
+import {carriersMap} from '@/configuration/carriersConfig_en'
 
 export default {
   name: 'ShippingTrack',
@@ -101,8 +110,11 @@ export default {
       trans: this.transaction,
       cusName: '',
       shippingID: '',
+      trackingNum: '',
+      carrier: '',
       desCountry: '',
-      trackingInfo: []
+      trackingInfo: [],
+      show: false
     }
   },
   created () {
@@ -127,11 +139,23 @@ export default {
       ShippingService.fetchOneShipping(this.trans._id).then(response => {
         // console.log(response)
         if (response.data.data) {
-          this.shippingID = response.data.data._id
-          // ShippingService.fetchRealTimeTracking(this.trans._id).then(response => {
+          this.trackingNum = response.data.data.tracking_number
+          this.carrier = carriersMap[response.data.data.carrier_code]
           ShippingService.fetchOneTracking(this.trans._id).then(track => {
+            this.trackingInfo = track.data.track.origin_info.trackinfo
+            this.trackingInfo[this.trackingInfo.length - 1].color = 'blue'
+            this.trackingInfo[this.trackingInfo.length - 1].icon = 'pin_drop'
+            for (let i = 0; i < this.trackingInfo.length - 1; i++) {
+              if (this.trackingInfo[i].checkpoint_status === 'delivered') {
+                this.trackingInfo[i].color = 'green'
+                this.trackingInfo[i].icon = 'beenhere'
+              } else {
+                this.trackingInfo[i].color = 'grey'
+                this.trackingInfo[i].icon = 'local_shipping'
+              }
+            }
             console.log(track.data.track.origin_info.trackinfo)
-            // this.trackingInfo = response.data
+            this.show = true
           })
         }
       })
