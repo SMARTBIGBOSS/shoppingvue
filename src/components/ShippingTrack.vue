@@ -77,18 +77,30 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
-            <v-card-title>Select Country</v-card-title>
+            <v-card-title>Tracking Information</v-card-title>
+            <v-flex xs12 text-xs-left>
+              <a href="https://www.trackingmore.com/" target="_blank">国际小包查询</a>
+            </v-flex>
             <v-divider></v-divider>
             <v-card-text>
               <v-timeline align-top dense>
                 <v-timeline-item v-for="(track, i) in trackingInfo" :key="i" :color="track.color" :icon="track.icon">
                   <v-layout pt-3>
                     <v-flex xs12 sm3 text-xs-left v-text="track.Date"></v-flex>
-                    <v-flex xs12 sm9 text-xs-left v-text="track.StatusDescription"></v-flex>
+                    <v-flex xs12 sm9 text-xs-left v-if="!isEn" v-text="track.StatusDescription"></v-flex>
+                    <v-flex xs12 sm9 text-xs-left v-if="isEn" >
+                      <div>{{track.Details}}</div><div>Statue: {{track.StatusDescription}}</div>
+                    </v-flex>
                   </v-layout>
                 </v-timeline-item>
               </v-timeline>
             </v-card-text>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-text>
+            <template>
+              <track-map :geoLocation="geoCode"></track-map>
+            </template>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -101,10 +113,14 @@ import CustomerService from '@/services/customerServices'
 import ShippingService from '@/services/shippingServices'
 import {countryMap} from '@/configuration/countryConfig_en'
 import {carriersMap} from '@/configuration/carriersConfig_en'
+import GoogleMap from '@/components/GoogleMap'
 
 export default {
   name: 'ShippingTrack',
   props: ['transaction'],
+  components: {
+    'track-map': GoogleMap
+  },
   data () {
     return {
       trans: this.transaction,
@@ -114,6 +130,8 @@ export default {
       carrier: '',
       desCountry: '',
       trackingInfo: [],
+      geoCode: [],
+      isEn: true,
       show: false
     }
   },
@@ -141,8 +159,12 @@ export default {
         if (response.data.data) {
           this.trackingNum = response.data.data.tracking_number
           this.carrier = carriersMap[response.data.data.carrier_code]
-          ShippingService.fetchOneTracking(this.trans._id).then(track => {
-            this.trackingInfo = track.data.track.origin_info.trackinfo
+          ShippingService.fetchOneTracking(this.trans._id).then(res => {
+            this.trackingInfo = res.data.track.origin_info.trackinfo
+            if (/.*[\u4e00-\u9fa5]+.*/.test(this.trackingInfo[0].Details)) {
+              this.isEn = false
+            }
+            this.geoCode = res.data.geo
             this.trackingInfo[this.trackingInfo.length - 1].color = 'blue'
             this.trackingInfo[this.trackingInfo.length - 1].icon = 'pin_drop'
             for (let i = 0; i < this.trackingInfo.length - 1; i++) {
@@ -154,7 +176,8 @@ export default {
                 this.trackingInfo[i].icon = 'local_shipping'
               }
             }
-            console.log(track.data.track.origin_info.trackinfo)
+            // console.log(this.trackingInfo)
+            console.log(this.geoCode)
             this.show = true
           })
         }

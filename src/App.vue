@@ -76,7 +76,6 @@
             </v-list-tile>
           </v-list>
         </v-menu>
-
       </v-toolbar>
         <template>
           <signout :dialog="dialog" @update-dialog="updateDialog"></signout>

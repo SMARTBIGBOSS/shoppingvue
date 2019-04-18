@@ -6,6 +6,8 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import VueLazyload from 'vue-lazyload'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import {googleMapKey} from './keys'
 
 Vue.use(Vuetify)
 Vue.use(VueLazyload)
@@ -17,6 +19,13 @@ Vue.use(VueLazyload, {
   error: '../static/images/error.jpg',
   loading: '../static/images/loading.gif',
   attempt: 1
+})
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: googleMapKey,
+    libraries: 'places,drawing'
+  }
 })
 
 /* eslint-disable no-new */

@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "cypress": "^3.2.0",
+    "google": "^2.1.0",
     "paypal-checkout": "^4.0.263",
     "vee-validate": "^2.1.7",
     "vue": "^2.6.10",
@@ -23,6 +24,7 @@
     "vue-lazyload": "^1.2.6",
     "vue-paypal-checkout": "^3.2.0",
     "vue-router": "^3.0.1",
+    "vue2-google-maps": "^0.10.6",
     "vuelidate": "^0.7.4",
     "vuetify": "^1.4.3"
   },

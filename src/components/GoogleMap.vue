@@ -1,0 +1,154 @@
+<template>
+  <div>
+    <template v-if="ready">
+      <gmap-map
+        :center="center"
+        :zoom="zoom"
+        style="width:100%;  height: 400px;"
+      >
+        <gmap-marker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          :label="m.label"
+          @click="center=m.position"
+        ></gmap-marker>
+        <gmap-polyline v-bind:path.sync="path"
+                       v-bind:options="{strokeColor:'#008000'}">
+        </gmap-polyline>
+      </gmap-map>
+    </template>
+  </div>
+</template>
+
+<script>
+// import google from 'google'
+
+// import * as google from 'google'
+
+export default {
+  name: 'GoogleMap',
+  props: ['geoLocation'],
+  data () {
+    return {
+      center: null,
+      zoom: null,
+      // center: 'sydney',
+      locations: this.geoLocation,
+      markers: [],
+      bounds: [],
+      path: [],
+      clientWidth: '',
+      ready: false
+    }
+  },
+  created () {
+    this.load()
+  },
+  mounted () {
+    this.geolocate()
+  },
+  methods: {
+    async load () {
+      await this.addMarker()
+      await this.addPath()
+      await this.setCenter()
+      // if (this.center && this.markers && this.path) {
+      this.ready = true
+      // }
+    },
+    setCenter () {
+      let maxLat = this.locations[0].location.lat
+      let maxLng = this.locations[0].location.lng
+      let minLat = this.locations[0].location.lat
+      let minLng = this.locations[0].location.lng
+      for (let i = 0; i < this.locations.length; i++) {
+        maxLat = Math.max(maxLat, this.locations[i].location.lat)
+        maxLng = Math.max(maxLng, this.locations[i].location.lng)
+        minLat = Math.min(minLat, this.locations[i].location.lat)
+        minLng = Math.min(minLng, this.locations[i].location.lng)
+        if (i === this.locations.length - 1) {
+          let angle2 = maxLat - minLat
+          let angle = maxLng - minLng
+          // console.log(angle2)
+          // console.log(angle)
+          // let delta = 0
+          this.center = {
+            lat: minLat + angle2 / 2,
+            lng: minLng + angle / 2
+          }
+          //   if ((angle - angle2) > 5) {
+          //     angle = angle2
+          //     delta = 2
+          //   } else {
+          //     delta = 1
+          //   }
+          //   if (angle < 0) angle += 360
+          //
+          //   this.zoom = Math.floor(Math.log(960 * 360 / angle / 256) / Math.LN2) - 1 - delta
+          this.zoom = this.getBoundsZoomLevel(maxLat, minLat, maxLng, minLng)
+        }
+      }
+    },
+    getBoundsZoomLevel (maxLat, minLat, maxLng, minLng) {
+      var WORLD_DIM = { height: 256, width: 256 }
+      var ZOOM_MAX = 21
+      this.clientWidth = `${document.documentElement.clientWidth}`
+      console.log(this.clientWidth)
+      function latRad (lat) {
+        var sin = Math.sin(lat * Math.PI / 180)
+        var radX2 = Math.log((1 + sin) / (1 - sin)) / 2
+        return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2
+      }
+
+      function zoom (mapPx, worldPx, fraction) {
+        return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2)
+      }
+
+      var ne = {lat: maxLat, lng: maxLng}
+      var sw = {lat: minLat, lng: minLng}
+
+      var latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI
+
+      var lngDiff = ne.lng - sw.lng
+      var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360
+
+      var latZoom = zoom(400, WORLD_DIM.height, latFraction)
+      var lngZoom = zoom(this.clientWidth, WORLD_DIM.width, lngFraction)
+
+      return Math.min(latZoom, lngZoom, ZOOM_MAX)
+    },
+    addMarker () {
+      for (let i = 0; i < this.locations.length; i++) {
+        let place = this.locations[i]
+        this.markers.push({
+          position: {lat: place.location.lat, lng: place.location.lng},
+          label: {
+            text: place.index.toString(),
+            color: '#000000',
+            fontSize: '16px',
+            fontWeight: 'bold'
+          },
+          zIndex: place.index
+        })
+      }
+    },
+    addPath () {
+      let temp = this.locations
+      temp.sort(function (a, b) {
+        return a.index - b.index
+      })
+      for (let i = 0; i < temp.length; i++) {
+        this.path.push({lat: temp[i].location.lat, lng: temp[i].location.lng})
+      }
+    },
+    geolocate: function () {
+      this.clientWidth = `${document.documentElement.clientWidth}`
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
