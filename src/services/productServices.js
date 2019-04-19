@@ -24,5 +24,11 @@ export default {
   },
   putBodyImage (seller, id, image) {
     return Api().put(`/${seller}/product/${id}/productBody`, image)
+  },
+  fetchByRegion (rId) {
+    return Api().get(`/product/region/${rId}`)
+  },
+  fetchByRegionAndCatalog (rId, cId) {
+    return Api().get(`/product/${rId}/${cId}`)
   }
 }

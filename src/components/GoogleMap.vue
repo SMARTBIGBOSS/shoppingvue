@@ -22,9 +22,6 @@
 </template>
 
 <script>
-// import google from 'google'
-
-// import * as google from 'google'
 
 export default {
   name: 'GoogleMap',
@@ -70,34 +67,22 @@ export default {
         if (i === this.locations.length - 1) {
           let angle2 = maxLat - minLat
           let angle = maxLng - minLng
-          // console.log(angle2)
-          // console.log(angle)
-          // let delta = 0
           this.center = {
             lat: minLat + angle2 / 2,
             lng: minLng + angle / 2
           }
-          //   if ((angle - angle2) > 5) {
-          //     angle = angle2
-          //     delta = 2
-          //   } else {
-          //     delta = 1
-          //   }
-          //   if (angle < 0) angle += 360
-          //
-          //   this.zoom = Math.floor(Math.log(960 * 360 / angle / 256) / Math.LN2) - 1 - delta
           this.zoom = this.getBoundsZoomLevel(maxLat, minLat, maxLng, minLng)
         }
       }
     },
     getBoundsZoomLevel (maxLat, minLat, maxLng, minLng) {
-      var WORLD_DIM = { height: 256, width: 256 }
-      var ZOOM_MAX = 21
+      let WORLD_DIM = { height: 256, width: 256 }
+      let ZOOM_MAX = 21
       this.clientWidth = `${document.documentElement.clientWidth}`
       console.log(this.clientWidth)
       function latRad (lat) {
-        var sin = Math.sin(lat * Math.PI / 180)
-        var radX2 = Math.log((1 + sin) / (1 - sin)) / 2
+        let sin = Math.sin(lat * Math.PI / 180)
+        let radX2 = Math.log((1 + sin) / (1 - sin)) / 2
         return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2
       }
 
@@ -105,16 +90,16 @@ export default {
         return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2)
       }
 
-      var ne = {lat: maxLat, lng: maxLng}
-      var sw = {lat: minLat, lng: minLng}
+      let ne = {lat: maxLat, lng: maxLng}
+      let sw = {lat: minLat, lng: minLng}
 
-      var latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI
+      let latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI
 
-      var lngDiff = ne.lng - sw.lng
-      var lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360
+      let lngDiff = ne.lng - sw.lng
+      let lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360
 
-      var latZoom = zoom(400, WORLD_DIM.height, latFraction)
-      var lngZoom = zoom(this.clientWidth, WORLD_DIM.width, lngFraction)
+      let latZoom = zoom(400, WORLD_DIM.height, latFraction)
+      let lngZoom = zoom(this.clientWidth, WORLD_DIM.width, lngFraction)
 
       return Math.min(latZoom, lngZoom, ZOOM_MAX)
     },

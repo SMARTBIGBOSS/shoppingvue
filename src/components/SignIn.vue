@@ -114,12 +114,12 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              // this.$router.go(-1)
-              // setTimeout(function () {
-              //   this.$router.push({path: '/_empty'})
-              // }, 1000)
-              this.$router.push({path: '/'})
               this.$router.go(0)
+              setTimeout(function () {
+                this.$router.push({path: '/'})
+              }, 2000)
+              // this.$router.go(0)
+              // this.$router.push({path: '/'})
             }
           })
         } else if (this.role === 'seller') {

@@ -7,6 +7,12 @@ export default {
   fetchClasByType (admin, type) {
     return Api().get(`/admin/${admin}/classification/type/${type}`)
   },
+  fetchByTitle (catalog) {
+    return Api().get(`/classification/title_active/${catalog}`)
+  },
+  fetchClasBySubtitle (region) {
+    return Api().get(`/product/subtitle/${region}`)
+  },
   postClassification (admin, classi) {
     return Api().post(`/admin/${admin}/classification`, classi)
   },
