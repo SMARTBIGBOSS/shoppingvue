@@ -11,8 +11,23 @@
           v-for="(m, index) in markers"
           :position="m.position"
           :label="m.label"
-          @click="center=m.position"
+          @click="center=m.position; showInfoWindow(m)"
         ></gmap-marker>
+
+        <gmap-info-window
+          @closeclick="infoWinOpen=false"
+          :position="infoWindowPos"
+          :opened="infoWinOpen"
+          :options="{
+            pixelOffset: {
+              width: 0,
+              height: -45
+            }
+          }"
+        >
+          <strong>{{infoContent}}</strong>
+        </gmap-info-window>
+
         <gmap-polyline v-bind:path.sync="path"
                        v-bind:options="{strokeColor:'#008000'}">
         </gmap-polyline>
@@ -36,7 +51,10 @@ export default {
       bounds: [],
       path: [],
       clientWidth: '',
-      ready: false
+      ready: false,
+      infoWinOpen: false,
+      infoWindowPos: {lat: 0, lng: 0},
+      infoContent: ''
     }
   },
   created () {
@@ -79,7 +97,7 @@ export default {
       let WORLD_DIM = { height: 256, width: 256 }
       let ZOOM_MAX = 21
       this.clientWidth = `${document.documentElement.clientWidth}`
-      console.log(this.clientWidth)
+      // console.log(this.clientWidth)
       function latRad (lat) {
         let sin = Math.sin(lat * Math.PI / 180)
         let radX2 = Math.log((1 + sin) / (1 - sin)) / 2
@@ -104,6 +122,13 @@ export default {
       return Math.min(latZoom, lngZoom, ZOOM_MAX)
     },
     addMarker () {
+      // let contentString = '<div id="conten">' +
+      //   '<h1>Description: </h1>' +
+      //   '<p>{{trackInfo.StatusDescription}}</p>' +
+      //   '<h1>Details: </h1>' +
+      //   '<p>{{trackInfo.Details}}</p>' +
+      //   '</div>'
+
       for (let i = 0; i < this.locations.length; i++) {
         let place = this.locations[i]
         this.markers.push({
@@ -114,9 +139,16 @@ export default {
             fontSize: '16px',
             fontWeight: 'bold'
           },
+          title: place.location.address,
           zIndex: place.index
         })
       }
+    },
+    showInfoWindow (marker) {
+      this.infoWindowPos = {lat: marker.position.lat, lng: marker.position.lng}
+      this.infoContent = marker.title
+      console.log(this.infoContent)
+      this.infoWinOpen = true
     },
     addPath () {
       let temp = this.locations

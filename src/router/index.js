@@ -7,7 +7,6 @@ import SignOut from '@/components/SignOut'
 import SellerHome from '@/components/SellerHome'
 import AddProduct from '@/components/AddProduct'
 import EditProduct from '@/components/EditProduct'
-// import EditAccount from '@/components/EditAccount'
 import AccountInformation from '@/components/AccountInformation'
 import AdminHome from '@/components/AdminHome'
 import ProductPage from '@/components/ProductPage'
@@ -16,7 +15,8 @@ import Orders from '@/components/OrderList'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -26,7 +26,10 @@ export default new Router({
     {
       path: '/signin',
       name: 'SignIn',
-      component: SignIn
+      component: SignIn,
+      meta: {
+        guest: true
+      }
     },
     {
       path: '/signup',
@@ -36,47 +39,116 @@ export default new Router({
     {
       path: '/signout',
       name: 'SignOut',
-      component: SignOut
+      component: SignOut,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/seller_home',
       name: 'SellerHome',
-      component: SellerHome
+      component: SellerHome,
+      meta: {
+        requiresAuth: true,
+        is_seller: true
+      }
     },
     {
       path: '/editProduct',
       name: 'EditProduct',
-      component: EditProduct
+      component: EditProduct,
+      meta: {
+        requiresAuth: true,
+        is_seller: true
+      }
     },
     {
       path: '/addProduct',
       name: 'AddProduct',
-      component: AddProduct
+      component: AddProduct,
+      meta: {
+        requiresAuth: true,
+        is_seller: true
+      }
     },
     {
       path: '/showAccount',
       name: 'AccountInformation',
-      component: AccountInformation
+      component: AccountInformation,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/adminHome',
       name: 'AdminHome',
-      component: AdminHome
+      component: AdminHome,
+      meta: {
+        requiresAuth: true,
+        is_admin: true
+      }
     },
     {
       path: '/product',
       name: 'ProductPage',
-      component: ProductPage
+      component: ProductPage,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/product/transaction',
       name: 'Transaction',
-      component: Transaction
+      component: Transaction,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/transactions',
       name: 'Orders',
-      component: Orders
+      component: Orders,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (sessionStorage.getItem('id') == null) {
+      next({
+        path: '/signin',
+        params: {nextUrl: to.fullPath}
+      })
+    } else {
+      let user = sessionStorage.getItem('role')
+      if (to.matched.some(record => record.meta.is_admin)) {
+        if (user === 'admin') {
+          next()
+        } else {
+          next({name: 'HomePage'})
+        }
+      } else if (to.matched.some(record => record.meta.is_seller)) {
+        if (user === 'seller') {
+          next()
+        } else {
+          next({name: 'HomePage'})
+        }
+      } else {
+        next()
+      }
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (sessionStorage.getItem('id') == null) {
+      next()
+    } else {
+      next({name: 'HomePage'})
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

@@ -114,12 +114,8 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
+              // this.$router.go(-1)
               this.$router.go(0)
-              setTimeout(function () {
-                this.$router.push({path: '/'})
-              }, 2000)
-              // this.$router.go(0)
-              // this.$router.push({path: '/'})
             }
           })
         } else if (this.role === 'seller') {
@@ -137,10 +133,6 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              // setTimeout(() => {
-              //   this.$router.go(0)
-              // }, 1000)
-              this.$router.push({path: '/seller_home'})//, query: {id: response.data.data._id, userName: response.data.data.name, role: this.role}
               this.$router.go(0)
             }
           })
@@ -158,12 +150,8 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              this.$router.push({path: '/adminHome'})
-              // this.$router.push('/')
-              // setTimeout(() => {
+              // this.$router.push({path: '/adminHome'})
               this.$router.go(0)
-              // this.$router.go(-2)
-              // }, 1000)
             }
           })
         }

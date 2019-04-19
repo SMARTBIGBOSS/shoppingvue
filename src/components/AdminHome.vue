@@ -52,15 +52,15 @@
               </v-card>
             </template>
 
-            <template v-if="isAddClassi">
+            <template v-else-if="isAddClassi">
               <add-classification-form :oneClassification="oneClassification" :isAddClassi="isAddClassi" @classification-is-added="createClassi"></add-classification-form>
             </template>
 
-            <template v-if="isEditClassi">
+            <template v-else-if="isEditClassi">
               <edit-classification-form :oneClassification="oneClassification" :isEditClassi="isEditClassi" @classification-is-updated="updateClassi"></edit-classification-form>
             </template>
 
-            <template v-if="isDeleteClassi">
+            <template v-else-if="isDeleteClassi">
               <v-layout row justify-center>
                 <v-dialog v-model="isDeleteClassi" persistent max-width="290">
                   <v-card>
@@ -74,6 +74,9 @@
                   </v-card>
                 </v-dialog>
               </v-layout>
+            </template>
+            <template v-else>
+              <h1>Click and choose the Classification</h1>
             </template>
           </div>
         </v-flex>

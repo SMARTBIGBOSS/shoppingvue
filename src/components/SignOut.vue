@@ -47,7 +47,7 @@ export default {
         sessionStorage.removeItem('name')
         this.openStatus = false
         this.$emit('update-dialog', this.openStatus)
-        this.$router.push('/')
+        // this.$router.push('/')
         this.$router.go(0)
       })
     }

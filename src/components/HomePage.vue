@@ -120,10 +120,10 @@
               <v-container fluid grid-list-md>
                 <v-layout row wrap>
                     <v-flex v-for="product in specificProducts" :key="product._id" v-bind="{['xs3']: true}">
-                    <v-card>
+                    <v-card @click.native="viewProduct(product._id)">
                       <v-img :src="product.detail_id.path[0]" height="200px" :aspect-ratio="1" contain/>
                       <v-card-actions>
-                        <v-btn flat class="text-none" @click="viewProduct(product._id)">{{product.name}}</v-btn>
+                        <v-btn flat class="text-none">{{product.name}}</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-flex>
@@ -142,10 +142,10 @@
           <v-container fluid grid-list-md>
             <v-layout row wrap>
               <v-flex v-for="product in products" :key="product._id" v-bind="{['xs3']: true}">
-                <v-card>
-                  <v-img :src="product.detail_id.path[0]" height="200px" :aspect-ratio="1" contain @click="viewProduct(product._id)"/>
+                <v-card @click.native="viewProduct(product._id)">
+                  <v-img :src="product.detail_id.path[0]" height="200px" :aspect-ratio="1" contain/>
                   <v-card-actions>
-                    <v-btn flat class="text-none" @click="viewProduct(product._id)">{{product.name}}</v-btn>
+                    <v-btn flat class="text-none">{{product.name}}</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -208,7 +208,7 @@ export default {
               }
             }
           }
-          console.log(this.categories)
+          // console.log(this.categories)
         }
       })
     },

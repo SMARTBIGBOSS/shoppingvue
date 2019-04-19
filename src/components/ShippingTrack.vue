@@ -77,9 +77,12 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
-            <v-card-title>Tracking Information</v-card-title>
+            <v-card-title class="text-xs-left title pb-2">Tracking Information</v-card-title>
             <v-flex xs12 text-xs-left>
-              <a href="https://www.trackingmore.com/" target="_blank">国际小包查询</a>
+              <p>You can also user the
+              <a title="All in one package tracking & Notify" target="_blank" href="//www.trackingmore.com">Trackingmore</a>
+                website for tracking.
+              </p>
             </v-flex>
             <v-divider></v-divider>
             <v-card-text>
@@ -177,7 +180,7 @@ export default {
               }
             }
             // console.log(this.trackingInfo)
-            console.log(this.geoCode)
+            // console.log(this.geoCode)
             this.show = true
           })
         }
