@@ -109,7 +109,7 @@
                 <v-btn v-if="!toPay" class="text-none" color="blue lighten-2" :disabled="!valid" @click="confirmOrder">Confirm order</v-btn>
                 <v-spacer></v-spacer>
                 <template v-if="toPay">
-                  <paypal :amount="total" :item="targetProduct" :shipping="shipping"></paypal>
+                  <paypal :amount="total" :subtotal="subtotal" :item="targetProduct" :shipping="shipping"></paypal>
                 </template>
               </v-form>
             </v-card-text>
@@ -144,6 +144,7 @@ export default {
       productImg: this.$route.params.img,
       productInfo: null,
       quantity: this.$route.params.quantity,
+      subtotal: '',
       total: '',
       errorMsg: '',
       valid: true,
@@ -190,14 +191,15 @@ export default {
         if (response.data.data) {
           this.targetProduct = response.data.data
           this.targetProduct.quantity = this.quantity
+          this.subtotal = (this.targetProduct.price * parseInt(this.quantity, 10)).toString()
+          this.total = (this.targetProduct.shipping_price + parseFloat(this.subtotal)).toString()
           this.productInfo = [
             {text: 'Quantity', value: this.$route.params.quantity},
             {text: 'Type', value: this.targetProduct.class_type_id.subtitle},
             {text: 'Region', value: this.targetProduct.class_region_id.subtitle},
-            {text: 'Subtotal', value: this.targetProduct.price},
+            {text: 'Subtotal', value: this.subtotal},
             {text: 'Shipping', value: this.targetProduct.shipping_price}
           ]
-          this.total = (this.targetProduct.shipping_price + this.targetProduct.price * parseInt(this.quantity, 10)).toString()
           this.isLoaded = true
           // console.log(this.targetProduct)
         } else {
@@ -220,7 +222,7 @@ export default {
         this.toPay = false
       } else {
         this.country_code = findContry(countryMap, this.country)
-        console.log(this.country_code)
+        // console.log(this.country_code)
         // if (this.country === 'Ireland') {
         //   this.country_code = 'IE'
         // } else if (this.country === 'China') {
@@ -236,7 +238,9 @@ export default {
           postal_code: this.post_code,
           contact_num: this.contact_num
         }
-        // console.log(this.shipping)
+        console.log(this.total)
+        console.log(this.targetProduct)
+        console.log(this.shipping)
         this.toPay = true
       }
     }

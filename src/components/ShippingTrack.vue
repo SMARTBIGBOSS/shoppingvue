@@ -2,7 +2,7 @@
   <div id="shippingtrack">
     <v-layout row warp>
       <v-flex xs12 md10 offset-md1>
-        <v-card v-if="show">
+        <v-card v-if="show && isShip">
           <v-card-title class="headline pl-3 pt-3">
             <v-btn flat @click="back">
               <v-icon x-large color="blue darken-2">arrow_back</v-icon>
@@ -106,6 +106,13 @@
             </template>
           </v-card-text>
         </v-card>
+        <v-card v-if="show && !isShip">
+          <v-card-title class="text-xs-left title pb-2">
+            <v-btn flat @click="back">
+              <v-icon x-large color="blue darken-2">arrow_back</v-icon>
+            </v-btn>
+            Waiting for shipping ...</v-card-title>
+        </v-card>
       </v-flex>
     </v-layout>
   </div>
@@ -135,6 +142,7 @@ export default {
       trackingInfo: [],
       geoCode: [],
       isEn: true,
+      isShip: false,
       show: false
     }
   },
@@ -158,7 +166,6 @@ export default {
       // let transID = {'transaction_id': this.trans._id}
       // console.log(transID.transaction_id)
       ShippingService.fetchOneShipping(this.trans._id).then(response => {
-        // console.log(response)
         if (response.data.data) {
           this.trackingNum = response.data.data.tracking_number
           this.carrier = carriersMap[response.data.data.carrier_code]
@@ -181,8 +188,12 @@ export default {
             }
             // console.log(this.trackingInfo)
             // console.log(this.geoCode)
+            this.isShip = true
             this.show = true
           })
+        } else {
+          this.isShip = false
+          this.show = true
         }
       })
     },

@@ -21,7 +21,7 @@ import TransactionService from '@/services/transactionServices'
 import PayPal from 'paypal-checkout'
 export default {
   name: 'PayPal',
-  props: ['amount', 'item', 'shipping'],
+  props: ['amount', 'subtotal', 'item', 'shipping'],
   data () {
     return {
       // total: this.amount,
@@ -99,9 +99,12 @@ export default {
                 // total: "1.00"
                 total: this.amount,
                 details: {
-                  subtotal: this.item.price.toString(),
+                  subtotal: this.subtotal,
                   tax: '0',
                   shipping: this.item.shipping_price.toString()
+                  // city: this.shipping.city,
+                  // state: this.shipping.province,
+                  // zip: this.shipping.postal_code
                 }
               },
               description: this.item._id,
