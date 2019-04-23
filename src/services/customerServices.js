@@ -36,5 +36,9 @@ export default {
   },
   fetchLogo (id) {
     return Api().get(`/customer/${id}/logo`)
+  },
+  fetchProductBySearch (name) {
+    return Api().get('/products/search',
+      {params: {name: name}})
   }
 }

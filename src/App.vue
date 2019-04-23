@@ -19,7 +19,6 @@
             <!--label="Search"-->
           <!--&gt;</v-text-field>-->
         </v-spacer>
-
         <v-btn icon>
         <!--<v-icon slot="badge" dark small>done</v-icon>-->
         <v-icon large v-if="!logoExist">account_circle</v-icon>

@@ -2,12 +2,12 @@
   <div class="homepage">
     <v-container fluid grid-list-md>
     <v-layout column>
-      <v-layout row wrap>
-        <v-flex xs6 sm4 md2>
+      <v-layout row wrap justify-space-between>
+        <v-flex xs6 sm4 md1>
         <div id="Asia">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
-              <v-btn v-on="on" color="success" >Asia</v-btn>
+              <v-btn v-on="on" color="success" flat block class="subheading">Asia</v-btn>
             </template>
             <v-list dense subheader>
               <v-list-tile v-for="(item, index) in asiaItems" :key="index" @click="searchByRegion(item.title)">
@@ -17,23 +17,25 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md2>
+        <v-flex xs6 sm4 md1>
         <div id="Africa">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
-            <v-btn slot="activator" color="success" >Africa</v-btn>
-            <v-list>
-              <v-list-tile v-for="(item, index) in items" :key="index" @click="searchByRegion">
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" color="success" flat block class="subheading">Africa</v-btn>
+            </template>
+            <v-list dense subheader>
+              <v-list-tile v-for="(item, index) in africaItems" :key="index" @click="searchByRegion">
                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               </v-list-tile>
             </v-list>
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md2>
+        <v-flex xs6 sm4 md1>
         <div id="Europe">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
-              <v-btn v-on="on" color="success" >Europe</v-btn>
+              <v-btn v-on="on" color="success" flat block class="subheading">Europe</v-btn>
             </template>
             <v-list dense subheader>
               <v-list-tile v-for="(item, index) in europeItems" :key="index" @click="searchByRegion(item.title)">
@@ -43,41 +45,37 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md2>
-        <div id="NorthAmerica">
+        <v-flex xs6 sm4 md1>
+        <div id="America">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
-            <v-btn slot="activator" color="success" >North America</v-btn>
-            <v-list>
-              <v-list-tile v-for="(item, index) in items" :key="index" @click="searchByRegion">
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" color="success" flat block class="subheading">America</v-btn>
+            </template>
+            <v-list dense subheader>
+              <v-list-tile v-for="(item, index) in americaItems" :key="index" @click="searchByRegion">
                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               </v-list-tile>
             </v-list>
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md2>
-        <div id="SouthAmerica">
-          <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
-            <v-btn slot="activator" color="success" >South America</v-btn>
-            <v-list>
-              <v-list-tile v-for="(item, index) in items" :key="index" @click="searchByRegion">
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
-        </div>
-        </v-flex>
-        <v-flex xs6 sm4 md2>
+        <v-flex xs6 sm4 md1>
         <div id="Oceania">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
-            <v-btn slot="activator" color="success" >Oceania</v-btn>
-            <v-list>
-              <v-list-tile v-for="(item, index) in items" :key="index" @click="searchByRegion">
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" color="success" flat block class="subheading">Oceania</v-btn>
+            </template>
+            <v-list dense subheader>
+              <v-list-tile v-for="(item, index) in oceaniaItems" :key="index" @click="searchByRegion">
                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               </v-list-tile>
             </v-list>
           </v-menu>
         </div>
+        </v-flex>
+        <v-flex xs6 sm4 md4>
+          <v-text-field label="Search" prepend-inner-icon="search"
+                        @keyup.enter.native="searchProduct" v-model="search"></v-text-field>
         </v-flex>
       </v-layout>
 
@@ -161,6 +159,7 @@
 <script>
 import ClassificationService from '@/services/classificationServices'
 import ProductService from '@/services/productServices'
+import CustomerService from '@/services/customerServices'
 
 export default {
   name: 'HomePage',
@@ -172,11 +171,15 @@ export default {
       categories: [],
       products: [],
       asiaItems: [{title: 'China', index: 0}],
+      africaItems: [{title: 'Not open', index: 0}],
       europeItems: [{title: 'Ireland', index: 0}],
+      americaItems: [{title: 'Not open', index: 0}],
+      oceaniaItems: [{title: 'Not open', index: 0}],
       specificProducts: [],
       regionId: 'null',
       isSearch: false,
-      isFound: false
+      isFound: false,
+      search: ''
     }
   },
   created () {
@@ -256,6 +259,19 @@ export default {
       })
       // }
       // })
+    },
+    searchProduct () {
+      CustomerService.fetchProductBySearch(this.search).then(response => {
+        console.log(response.data)
+        if (response.data.length > 0) {
+          this.specificProducts = response.data
+          this.isFound = true
+          this.isSearch = true
+        } else {
+          this.isFound = false
+          this.isSearch = true
+        }
+      })
     }
   }
 }
