@@ -4,7 +4,7 @@
     <v-container fluid>
       <v-layout row wrap>
         <v-flex xs12 sm4 md3>
-          <v-navigation-drawer permanent width="600">
+          <v-navigation-drawer permanent width="600" v-if="isShowMenu">
           <v-toolbar flat color="green lighten-3">
             <v-toolbar-title>Menu</v-toolbar-title>
             <v-spacer class="pl-5">
@@ -28,7 +28,7 @@
         <v-flex xs12 md8 lg9 >
           <div>
           <v-card>
-            <v-card-title>
+            <v-card-title class="headline">
               Products
               <v-spacer></v-spacer>
               <v-btn color="blue lighten-2" dark @click="addProduct">Add</v-btn>
@@ -149,7 +149,8 @@ export default {
       ],
       products: [],
       imgURL: '',
-      isShowData: false
+      isShowData: false,
+      isShowMenu: false
     }
   },
   created () {
@@ -161,6 +162,7 @@ export default {
       let user = sessionStorage.getItem('id')
       SellerService.fetchAllCatalog(user).then(response => {
         this.catalogs = response.data.data
+        this.isShowMenu = true
         // console.log(this.catalogs)
       })
     },

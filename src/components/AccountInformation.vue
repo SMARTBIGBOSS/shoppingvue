@@ -384,11 +384,19 @@ export default {
       }
     },
     updataLogo: function (formData) {
-      CustomerService.postLogo(sessionStorage.getItem('id'), formData).then(response => {
-        if (response.data.data) {
-          this.$router.go(0)
-        }
-      })
+      if (sessionStorage.getItem('role') === 'customer') {
+        CustomerService.putLogo(sessionStorage.getItem('id'), formData).then(response => {
+          if (response.data.data) {
+            this.$router.go(0)
+          }
+        })
+      } else if (sessionStorage.getItem('role') === 'seller') {
+        SellerService.putLogo(sessionStorage.getItem('id'), formData).then(response => {
+          if (response.data.data) {
+            this.$router.go(0)
+          }
+        })
+      }
     },
     addAddress () {
       this.oneAddress = {

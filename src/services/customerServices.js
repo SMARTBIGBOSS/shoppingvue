@@ -31,8 +31,8 @@ export default {
   deleteAddress (id) {
     return Api().delete(`/customer/address/${id}`)
   },
-  postLogo (id, logo) {
-    return Api().post(`/customer/${id}/uploadLogo`, logo)
+  putLogo (id, logo) {
+    return Api().put(`/customer/${id}/uploadLogo`, logo)
   },
   fetchLogo (id) {
     return Api().get(`/customer/${id}/logo`)

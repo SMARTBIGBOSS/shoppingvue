@@ -27,7 +27,7 @@
 
         </v-toolbar-items>
 
-        <v-menu class="hidden-sm-and-up" left>
+        <v-menu class="hidden-md-and-up" left>
           <template v-slot:activator="{ on }">
             <v-btn dark icon v-on="on">
               <v-icon>list</v-icon>

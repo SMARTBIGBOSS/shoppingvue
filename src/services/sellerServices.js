@@ -22,6 +22,9 @@ export default {
   fetchLogo (id) {
     return Api().get(`/seller/${id}/logo`)
   },
+  putLogo (id, logo) {
+    return Api().put(`/seller/${id}/uploadLogo`, logo)
+  },
   fetchSeller (sellerId) {
     return Api().get(`/seller/${sellerId}`)
   },
