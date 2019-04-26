@@ -1,7 +1,7 @@
 <template>
   <div id="editaddress">
       <v-card>
-        <v-card-title>Shipping Address
+        <v-card-title class="display-1 pl-5 pt-5">Shipping Address
           <v-spacer></v-spacer>
         </v-card-title>
         <v-card-text>

@@ -1,7 +1,7 @@
 <template>
   <div id="editaccount">
     <v-card>
-      <v-card-title>Account Information
+      <v-card-title class="display-1 pl-5 pt-5">Account Information
         <v-spacer></v-spacer>
       </v-card-title>
       <v-card-text>

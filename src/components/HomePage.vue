@@ -3,7 +3,7 @@
     <v-container fluid grid-list-md>
     <v-layout column>
       <v-layout row wrap justify-space-between>
-        <v-flex xs6 sm4 md1>
+        <v-flex xs12 sm6 md1>
         <div id="Asia">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
@@ -17,7 +17,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md1>
+        <v-flex xs12 sm6 md1>
         <div id="Africa">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
@@ -31,7 +31,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md1>
+        <v-flex xs12 sm6 md1>
         <div id="Europe">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
@@ -45,7 +45,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md1>
+        <v-flex xs12 sm6 md1>
         <div id="America">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
@@ -59,7 +59,7 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md1>
+        <v-flex xs12 sm6 md1>
         <div id="Oceania">
           <v-menu offset-y content-class="dropdown-menu" transition="slide-y-transition">
             <template v-slot:activator="{ on }">
@@ -73,16 +73,16 @@
           </v-menu>
         </div>
         </v-flex>
-        <v-flex xs6 sm4 md4>
+        <v-flex xs12 sm6 md4>
           <v-text-field label="Search" prepend-inner-icon="search"
                         @keyup.enter.native="searchProduct" v-model="search"></v-text-field>
         </v-flex>
       </v-layout>
 
       <v-layout row wrap>
-        <v-flex xs6 sm5 md3>
+        <v-flex xs12 sm5 md3>
         <div id="toolbar">
-          <v-navigation-drawer permanent value="true">
+          <v-navigation-drawer permanent value="true" width="600">
             <v-toolbar flat class="green lighten-4">
               <v-list>
                 <v-list-tile>
@@ -105,7 +105,7 @@
         </div>
         </v-flex>
 
-        <v-flex xs6 sm7 md9>
+        <v-flex xs12 sm7 md9>
             <div id="advertise" v-if="!isSearch">
               <v-carousel height="400px">
                 <v-carousel-item v-for="(item,i) in items" :key="i">
@@ -139,11 +139,11 @@
         <v-card v-if="!isSearch">
           <v-container fluid grid-list-md>
             <v-layout row wrap>
-              <v-flex v-for="product in products" :key="product._id" v-bind="{['xs3']: true}">
+              <v-flex v-for="product in products" :key="product._id" v-bind="{['xs12 sm6 md3']: true}">
                 <v-card @click.native="viewProduct(product._id)">
-                  <v-img :src="product.detail_id.path[0]" height="200px" :aspect-ratio="1" contain/>
+                  <v-img :src="product.detail_id.path[0]" :aspect-ratio="1" contain/>
                   <v-card-actions>
-                    <v-btn flat class="text-none">{{product.name}}</v-btn>
+                    <v-btn block flat class="text-none">{{product.name}}</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>

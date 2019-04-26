@@ -1,10 +1,10 @@
 <template>
   <div id="adminhome">
     <v-container fluid>
-      <v-layout row>
-        <v-flex xs6 sm4>
+      <v-layout row wrap>
+        <v-flex xs12 sm5 md4>
           <div id="navigation">
-            <v-navigation-drawer stateless value="true">
+            <v-navigation-drawer stateless value="true" width="600">
               <v-list>
                 <v-list-group v-for="item in items" :key="item.title" v-model="item.active" :prepend-icon="item.action" no-action>
                   <v-list-tile slot="activator">
@@ -27,7 +27,7 @@
             </v-navigation-drawer>
           </div>
         </v-flex>
-        <v-flex xs6 sm8>
+        <v-flex xs12 sm7 md8>
           <div id="classiinfo">
             <template v-if="showDetail">
               <v-card>

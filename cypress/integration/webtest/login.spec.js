@@ -2,7 +2,7 @@ describe('Login page', () => {
   beforeEach(() => {
     cy.visit('/')
     // Click Login link
-    cy.get('[href="#/signin"] > .v-btn__content').click()
+    cy.get('[href="/signin"] > .v-btn__content').click()
   })
   after(() => {
     cy.wait(2000)
@@ -71,7 +71,7 @@ describe('Login page', () => {
 
   describe('Valid Login', () => {
     afterEach(() => {
-      cy.get('[href="#/signout"] > .v-btn__content').click()
+      cy.get('.v-toolbar__content > :nth-child(6) > .v-btn__content').click()
       cy.get('.v-dialog__content--active > .v-dialog > .v-card > .v-card__actions > :nth-child(3) > .v-btn__content')
         .click()
       cy.wait(2000)
@@ -107,8 +107,10 @@ describe('Login page', () => {
           cy.get('.v-input--radio-group__input > :nth-child(2)').click()
         })
         cy.get('form > .v-btn').click()
-        // cy.wait(5000)
+        cy.wait(2000)
       })
+      cy.get('.v-menu > .v-btn > .v-btn__content > .v-icon').click()
+      cy.get('.menuable__content__active > .v-list > :nth-child(1) > .v-list__tile > .v-list__tile__title').click()
       cy.url().should('include', '/seller_home')
       cy.wait(2000)
     })
@@ -125,8 +127,10 @@ describe('Login page', () => {
           cy.get('.v-input--radio-group__input > :nth-child(3)').click()
         })
         cy.get('form > .v-btn').click()
-        // cy.wait(5000)
+        cy.wait(2000)
       })
+      cy.get('.v-menu > .v-btn > .v-btn__content > .v-icon').click()
+      cy.get('.menuable__content__active > .v-list > [role="listitem"] > .v-list__tile').click()
       cy.url().should('include', '/adminHome')
       cy.wait(2000)
     })

@@ -3,7 +3,7 @@
       <v-layout justify-center>
         <v-flex xs12 sm10 md8 lg6>
           <v-card>
-            <v-card-title>
+            <v-card-title class="headline">
               {{messagetitle}}
               <v-spacer></v-spacer>
             </v-card-title>

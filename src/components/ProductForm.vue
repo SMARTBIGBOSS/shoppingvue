@@ -1,8 +1,5 @@
 <template>
   <div id="productform">
-    <!--<v-app>-->
-      <!--<v-layout justify-center>-->
-        <!--<v-flex xs12 sm10 md8 lg6>-->
     <template v-if="loadForm">
           <v-form ref="form" v-model="valid" lazy-validation dark>
             <v-text-field v-model="name" :counter="100" :rules="nameRules" label="Name" required></v-text-field>
@@ -42,9 +39,6 @@
     </template>
     <p>{{detailmsg}}</p>
     <p>{{bodymsg}}</p>
-        <!--</v-flex>-->
-      <!--</v-layout>-->
-    <!--</v-app>-->
   </div>
 </template>
 

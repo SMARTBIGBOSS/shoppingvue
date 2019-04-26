@@ -2,14 +2,14 @@
   <div id="productpage">
     <v-container fluid grid-list-md>
       <v-layout column>
-        <v-layout row>
+        <v-layout row wrap>
           <v-flex xs12 sm10 wrap>
             <v-card v-if="isload">
-              <v-layout>
+              <v-layout wrap>
               <v-flex xs12 md5>
                 <v-carousel height="100%" hide-controls flat>
                   <v-carousel-item v-for="(item,i) in details" :key="i">
-                    <img :src="item" style="width:80%; height:100%;"/>
+                    <img :src="item" style="width:80%; height:100%;" />
                   </v-carousel-item>
                 </v-carousel>
               </v-flex>

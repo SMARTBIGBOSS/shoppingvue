@@ -1,12 +1,30 @@
 <template>
   <div id="accountinfo">
     <v-container fluid>
-      <v-layout row>
-        <v-flex xs6 sm4>
+      <v-layout row wrap>
+        <v-flex xs12 sm5 md4>
           <div id="navigation">
-            <v-navigation-drawer stateless value="true">
-        <v-list>
-          <v-list-group v-if="isCustomer" v-for="item in itemsC" :key="item.title" v-model="item.active" :prepend-icon="item.action" no-action>
+            <v-navigation-drawer stateless value="true" :width="600">
+              <v-list>
+                <v-list-group v-if="isCustomer" v-for="item in itemsC" :key="item.title" v-model="item.active" :prepend-icon="item.action" no-action>
+                  <v-list-tile slot="activator">
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+
+                  <v-list-tile v-for="subItem in item.items" :key="subItem.title" @click="editInfo(subItem.index)">
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                    </v-list-tile-content>
+
+                    <v-list-tile-action>
+                      <v-icon>{{ subItem.action }}</v-icon>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                </v-list-group>
+
+                <v-list-group v-if="!isCustomer" v-for="item in itemsS" :key="item.title" v-model="item.active" :prepend-icon="item.action" no-action>
             <v-list-tile slot="activator">
               <v-list-tile-content>
                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -23,41 +41,24 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list-group>
-
-          <v-list-group v-if="!isCustomer" v-for="item in itemsS" :key="item.title" v-model="item.active" :prepend-icon="item.action" no-action>
-            <v-list-tile slot="activator">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile v-for="subItem in item.items" :key="subItem.title" @click="editInfo(subItem.index)">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action>
-                <v-icon>{{ subItem.action }}</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-          </v-list-group>
-        </v-list>
-      </v-navigation-drawer>
+              </v-list>
+             </v-navigation-drawer>
           </div>
         </v-flex>
-        <v-flex xs6 sm8>
+
+        <v-flex xs12 sm7 md8>
           <div id="detailinfo">
             <template v-if="showBasicInfo">
               <v-card>
                 <v-card-text>
                   <div>
-                  <v-container fluid grid-list-sm>
-                    <v-layout row wrap>
-                      <v-flex xs4 offset-xs4>
-                        <img :src="logoURL" class="image" width="100%" height="100%">
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
+                    <v-container fluid grid-list-sm>
+                      <v-layout row wrap>
+                        <v-flex xs4 offset-xs4>
+                          <img :src="logoURL" class="image" width="100%" height="100%">
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
                   </div>
                   <div class="display-1 font-weight-thin">Name: {{userName}}</div>
                   <div class="display-1 font-weight-thin">Email: {{userEmail}}</div>
@@ -80,7 +81,7 @@
 
             <template v-if="showAddress">
               <v-card>
-                <v-card-title>
+                <v-card-title class="title">
                   Shipping Address
                   <v-spacer></v-spacer>
                   <v-btn color="blue lighten-2" dark @click="addAddress">Add</v-btn>

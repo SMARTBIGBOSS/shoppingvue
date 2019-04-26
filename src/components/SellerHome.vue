@@ -2,9 +2,9 @@
   <div id="sellerhome">
     <!--<v-app>-->
     <v-container fluid>
-      <v-layout row>
-        <v-flex xs6 sm4 md3>
-          <v-navigation-drawer permanent>
+      <v-layout row wrap>
+        <v-flex xs12 sm4 md3>
+          <v-navigation-drawer permanent width="600">
           <v-toolbar flat color="green lighten-3">
             <v-toolbar-title>Menu</v-toolbar-title>
             <v-spacer class="pl-5">
@@ -25,7 +25,7 @@
           </v-navigation-drawer>
         </v-flex>
 
-        <v-flex xs6 md8 lg9 >
+        <v-flex xs12 md8 lg9 >
           <div>
           <v-card>
             <v-card-title>

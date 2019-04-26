@@ -1,7 +1,7 @@
 <template>
   <div id="editclassi">
     <v-card>
-      <v-card-title>Classification Information
+      <v-card-title class="headline">Classification Information
         <v-spacer></v-spacer>
       </v-card-title>
       <v-card-text>

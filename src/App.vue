@@ -9,29 +9,53 @@
         </v-btn>
         <v-toolbar-title>Overseas Shopping</v-toolbar-title>
 
-        <v-spacer>
-          <!--<v-autocomplete :loading="loading" :items="items" :search-input.sync="search"-->
-            <!--v-model="search" cache-items class="mx-3" flat hide-no-data hide-details-->
-            <!--label="Search" solo-inverted append-icon="search">-->
-          <!--</v-autocomplete>-->
-          <!--<v-text-field justify-center-->
-            <!--color="white"-->
-            <!--label="Search"-->
-          <!--&gt;</v-text-field>-->
-        </v-spacer>
-        <v-btn icon>
-        <!--<v-icon slot="badge" dark small>done</v-icon>-->
-        <v-icon large v-if="!logoExist">account_circle</v-icon>
-          <v-avatar size="30px" class="mb-3" v-else>
-            <img :src="logoURL">
-          </v-avatar>
-        </v-btn>
+        <v-spacer></v-spacer>
 
-        <v-btn flat small @click="showAccount">{{userName}}</v-btn>
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn icon>
+            <v-icon large v-if="!logoExist">account_circle</v-icon>
+            <v-avatar size="30px" class="mb-3" v-else>
+              <img :src="logoURL">
+            </v-avatar>
+          </v-btn>
 
-        <v-btn flat small to="/signin" v-if="isshow">Sign In</v-btn>
-        <v-btn flat small v-if="!isshow" @click="showDialog">Sign Out</v-btn>
-        <v-btn flat small to="/signup">Sign Up</v-btn>
+          <v-btn flat small @click="showAccount">{{userName}}</v-btn>
+
+          <v-btn flat small to="/signin" v-if="isshow">Sign In</v-btn>
+          <v-btn flat small v-if="!isshow" @click="showDialog">Sign Out</v-btn>
+          <v-btn flat small to="/signup">Sign Up</v-btn>
+
+        </v-toolbar-items>
+
+        <v-menu class="hidden-sm-and-up" left>
+          <template v-slot:activator="{ on }">
+            <v-btn dark icon v-on="on">
+              <v-icon>list</v-icon>
+            </v-btn>
+          </template>
+          <v-list dense subheader>
+            <v-list-tile>
+              <v-btn color="green darken-1" block flat small @click="showAccount"><v-icon v-if="!logoExist">account_circle</v-icon>
+                <v-avatar size="20px" class="mb-3" v-else>
+                  <img :src="logoURL">
+                </v-avatar>
+                {{userName}}
+              </v-btn>
+            </v-list-tile>
+          </v-list>
+          <v-list dense>
+            <v-list-tile>
+              <v-btn color="green darken-1" block flat small to="/signin" v-if="isshow">Sign In</v-btn>
+              <v-btn color="green darken-1" block flat small v-if="!isshow" @click="showDialog">Sign Out</v-btn>
+            </v-list-tile>
+
+          </v-list>
+          <v-list dense>
+            <v-list-tile>
+              <v-btn color="green darken-1" block flat small to="/signup">Sign Up</v-btn>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
 
         <v-btn icon v-if="showCart">
         <v-badge color="red">
@@ -75,6 +99,7 @@
             </v-list-tile>
           </v-list>
         </v-menu>
+
       </v-toolbar>
         <template>
           <signout :dialog="dialog" @update-dialog="updateDialog"></signout>
