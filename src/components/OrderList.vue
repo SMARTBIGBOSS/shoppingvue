@@ -1,7 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div id="shipping">
     <v-container fluid>
-      <v-layout row>
+      <v-layout row wrap>
         <v-flex xs12>
           <template v-if="isOrderField">
           <v-card v-if="isCuatomer">

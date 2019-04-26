@@ -1,7 +1,7 @@
 <template>
   <div id="signup">
     <!--<v-app>-->
-      <v-layout justify-center>
+      <v-layout justify-center wrap>
         <v-flex xs12 sm10 md8 lg6>
           <v-card ref="form" id="signupCard">
             <v-card-title class="display-1 pl-5 pt-5">Sign Up</v-card-title>
