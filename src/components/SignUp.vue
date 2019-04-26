@@ -24,6 +24,7 @@
                 <v-radio label="Seller" value="seller"></v-radio>
               </v-radio-group>
 
+              <h3>Please check your email to finish registration after submit the form</h3>
             </v-card-text>
             <v-divider class="mt-5"></v-divider>
             <v-card-actions>
@@ -117,7 +118,7 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              // this.$router.push('/')
+              this.$router.push('/')
             }
             console.log(response.data)
           })
@@ -133,7 +134,7 @@ export default {
               this.message = ''
               this.message = response.data.message
               this.submitStatus = 'PENDING'
-              // this.$router.push('/')
+              this.$router.push('/')
             }
           })
         }

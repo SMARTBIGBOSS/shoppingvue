@@ -55,7 +55,7 @@
                     <v-container fluid grid-list-sm>
                       <v-layout row wrap>
                         <v-flex xs4 offset-xs4>
-                          <img :src="logoURL" class="image" width="100%" height="100%">
+                          <img :src="logoURL" class="image" width="100%" height="100%" alt="No Logo Yet!">
                         </v-flex>
                       </v-layout>
                     </v-container>

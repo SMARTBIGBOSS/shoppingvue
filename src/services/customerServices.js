@@ -40,5 +40,8 @@ export default {
   fetchProductBySearch (name) {
     return Api().get('/products/search',
       {params: {name: name}})
+  },
+  activeAccount (code) {
+    return Api().get(`/active/customer?code=${code}`)
   }
 }

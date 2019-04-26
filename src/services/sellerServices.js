@@ -30,5 +30,8 @@ export default {
   },
   putSellerWithPass (id, seller) {
     return Api().put(`/seller/${id}/edit`, seller)
+  },
+  activeAccount (code) {
+    return Api().get(`/active/seller?code=${code}`)
   }
 }

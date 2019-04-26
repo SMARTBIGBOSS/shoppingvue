@@ -12,6 +12,7 @@ import AdminHome from '@/components/AdminHome'
 import ProductPage from '@/components/ProductPage'
 import Transaction from '@/components/Transaction'
 import Orders from '@/components/OrderList'
+import ActiveAccount from '@/components/ActiveAccount'
 
 Vue.use(Router)
 
@@ -34,7 +35,10 @@ let router = new Router({
     {
       path: '/signup',
       name: 'SignUp',
-      component: SignUp
+      component: SignUp,
+      meta: {
+        guest: true
+      }
     },
     {
       path: '/signout',
@@ -111,6 +115,16 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/active/customer',
+      name: 'ActiveCustomerAccount',
+      component: ActiveAccount
+    },
+    {
+      path: '/active/seller',
+      name: 'ActiveSellerAccount',
+      component: ActiveAccount
     }
   ]
 })
