@@ -158,7 +158,7 @@ export default {
   },
   created () {
     this.loadToolbar()
-    this.getLogo()
+    // this.getLogo()
     this.loadMenu()
   },
   // watch: {

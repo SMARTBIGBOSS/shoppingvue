@@ -122,9 +122,9 @@ export default {
           sellerService.postSignin(user).then(response => {
             console.log(response.data)
             if (response.data.data === null) {
-              this.isLogged = 'NO'
               this.message = ''
               this.message = response.data.message
+              this.isLogged = 'NO'
             } else {
               this.isLogged = 'YES'
               sessionStorage.setItem('id', response.data.data._id)
@@ -139,9 +139,9 @@ export default {
         } else if (this.role === 'admin') {
           adminService.postSignin(user).then(response => {
             if (response.data.data === null) {
-              this.isLogged = 'NO'
               this.message = ''
               this.message = response.data.message
+              this.isLogged = 'NO'
             } else {
               this.isLogged = 'YES'
               sessionStorage.setItem('id', response.data.data._id)

@@ -3,7 +3,7 @@
     <!--<v-app>-->
     <v-container fluid>
       <v-layout row wrap>
-        <v-flex xs12 sm4 md3>
+        <v-flex xs12 md4>
           <v-navigation-drawer permanent width="600" v-if="isShowMenu">
           <v-toolbar flat color="green lighten-3">
             <v-toolbar-title>Menu</v-toolbar-title>
@@ -25,7 +25,7 @@
           </v-navigation-drawer>
         </v-flex>
 
-        <v-flex xs12 md8 lg9 >
+        <v-flex xs12 md8 >
           <div>
           <v-card>
             <v-card-title class="headline">
