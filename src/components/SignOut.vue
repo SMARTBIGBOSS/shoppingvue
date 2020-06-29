@@ -42,13 +42,15 @@ export default {
     signOut () {
       adminService.postSignout().then(response => {
         console.log(response.data.data)
-        sessionStorage.removeItem('id')
-        sessionStorage.removeItem('role')
-        sessionStorage.removeItem('name')
-        this.openStatus = false
-        this.$emit('update-dialog', this.openStatus)
-        // this.$router.push('/')
-        this.$router.go(0)
+        if (response.data.data === null) {
+          sessionStorage.removeItem('id')
+          sessionStorage.removeItem('role')
+          sessionStorage.removeItem('name')
+          this.openStatus = false
+          this.$emit('update-dialog', this.openStatus)
+          // this.$router.push('/')
+          this.$router.go(0)
+        }
       })
     }
   }
